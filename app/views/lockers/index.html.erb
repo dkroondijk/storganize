@@ -1,0 +1,16 @@
+<h1>My Lockers</h1>
+
+<div class="locker-list col-md-3">
+  <% @lockers.each do |locker| %>
+    <%= link_to locker.name, locker_path(locker) %>
+  <% end %>
+</div>
+
+<div class="locker-list col-md-8 col-md-offset-1">
+  <%= simple_form_for @locker, url: lockers_path, method: :post do |f| %>
+    <%= f.input :name %>
+    <%= f.input :length %>
+    <%= f.input :width %>
+    <%= f.submit %>
+  <% end %>
+</div>

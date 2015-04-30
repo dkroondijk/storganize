@@ -1,0 +1,15 @@
+.nav-bar {
+  height: 50px;
+  background: #ccc;
+}
+
+.nav-button {
+  float: right;
+  padding: 15px;
+}
+
+.locker-list {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+}

@@ -8,7 +8,23 @@
 </head>
 <body>
 
-<%= yield %>
+<div class="nav-bar">
+  <div class="nav-button">
+    <%= link_to "Lockers", root_path %> |
+    <%= link_to "Sign Out", sessions_path, method: :delete %>
+  </div>
+</div>
+
+<div class="container">
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success"><%= flash[:notice] %></div>
+  <% elsif flash[:alert] %>
+    <div class="alert alert-danger"><%= flash[:alert] %></div>
+  <% end %>
+
+  <%= yield %>
+</div>  
 
 </body>
 </html>
