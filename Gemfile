@@ -32,6 +32,10 @@ gem 'simple_form'
 
 gem 'cancancan', '~> 1.10'
 
+gem 'threejs-rails', git: 'git://github.com/marvindanig/threejs-rails.git'
+
+gem 'jquery-turbolinks'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

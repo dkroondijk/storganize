@@ -1,3 +1,12 @@
-<h1><%= @locker.name %></h1>
-<p><%= @locker.length %></p>
-<p><%= @locker.width %></p>
+<div>
+  <div id="my-canvas" data-locker="<%= @locker.to_json %>"></div>
+
+  <div class="box-form col-md-5">
+    <h1>Locker: <%= @locker.name %></h1>
+    <p>Length: <%= @locker.length %></p>
+    <p>Width: <%= @locker.width %></p>
+    <button id="add-cube-btn">Add Cube!</button>
+  </div>
+  
+</div>
+  

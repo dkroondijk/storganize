@@ -1,0 +1,4 @@
+<script>
+  storganize = {};
+  storganize.locker = <%= @locker.to_json.html_safe %>;
+</script>
