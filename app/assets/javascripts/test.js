@@ -8,17 +8,15 @@ $(document).ready(function(){
     }
   }); 
 
+  // div that contains the renderer
   var myCanvas = $('#my-canvas')
 
   var raycaster = new THREE.Raycaster();
   var mouse = new THREE.Vector2();
-  // var objects = [];
-
-  // Define scene and camera cube test >>>>>>>>>>>>>>>>>
-  // var scene = new THREE.Scene();
-  // var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth()/myCanvas.innerHeight(), 0.1, 1000 );
-  // camera.position.set(5, 0, 30)
-  // camera.lookAt(new THREE.Vector(1, 1, 50));
+  var objects = [];
+  var offset = new THREE.Vector3();
+  var SELECTED;
+  var INTERSECTED;
 
   // Define scene and camera locker view >>>>>>>>>>>>>>>
   var scene = new THREE.Scene();
@@ -26,18 +24,16 @@ $(document).ready(function(){
   camera.position.set( 250, 400, 650 );
   camera.lookAt( new THREE.Vector3() );
 
-  // Define renderer cube test >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  // var renderer = new THREE.WebGLRenderer();
-  // renderer.setSize( myCanvas.innerWidth(), myCanvas.innerHeight() );
-  // renderer.setClearColor( 0xf0f0f0 );
-  // myCanvas.append( renderer.domElement );
-
   // Define renderer locker view >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   var renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setSize( myCanvas.innerWidth(), myCanvas.innerHeight() );
   renderer.setClearColor( 0xf0f0f0 );
   myCanvas.append( renderer.domElement );
+
   // renderer.setPixelRatio( window.devicePixelRatio );
+  renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+  renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+  renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
   // grid
   var lockerLength = $('#my-canvas').data('locker').length
@@ -60,25 +56,18 @@ $(document).ready(function(){
     gridGeometry.vertices.push( new THREE.Vector3(   gridWidth, 0, i ) );
   }
 
-
   var gridMaterial = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
 
   var line = new THREE.Line( gridGeometry, gridMaterial, THREE.LinePieces );
   scene.add( line );
 
-  var geometry = new THREE.PlaneBufferGeometry( 1000, 1000 );
+  var geometry = new THREE.PlaneBufferGeometry( 500, 500 );
   geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
   var plane = new THREE.Mesh( geometry );
-  plane.visible = false;
+  plane.visible = true;
   scene.add( plane );
-
-  // objects.push( plane );
-
-  // Define cube geometry and material
-  var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
-  var cubeMaterial = new THREE.MeshBasicMaterial( { color: 0xdeae66 } );
-  var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+  objects.push( plane );
 
   // Define 'add cube' function
   var addCube = function() {
@@ -88,13 +77,16 @@ $(document).ready(function(){
     window.cube = cube;
     var box_id = cube.id
 
-    // cube.position.x = Math.floor((Math.random() * 10) + 1);
-    // cube.position.y = Math.floor((Math.random() * 10) + 1);
+    cube.position.x = Math.floor((Math.random() * 10) * 25);
+    cube.position.z = Math.floor((Math.random() * 10) * 25);
+    cube.position.y = 25;
     
-    cube.position.x = -5;
-    cube.position.y = 5;
+    // cube.position.x = 0;
+    // cube.position.y = 25;
+    // cube.position.z = 25;
 
     scene.add( cube );
+    objects.push(cube);
 
     // $.post('/boxes', {name: 'box'+box_id, x: 2, y: 2, z: 2})
   }
@@ -103,11 +95,6 @@ $(document).ready(function(){
   $('#add-cube-btn').click(function(){
     addCube();
   });
-
-  // Define scene lighting cube test >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  // var light = new THREE.PointLight( 0xFFFF00 );
-  // light.position.set( 10, 0, 10 );
-  // scene.add( light );
 
   // Lighting locker view >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   var ambientLight = new THREE.AmbientLight( 0x606060 );
@@ -131,33 +118,86 @@ $(document).ready(function(){
     renderer.render(scene, camera);
   };
 
-  // call render loop
-  render();
-
-
-  function onDocumentMouseDown( event ) {
-
+  function onDocumentMouseMove(event) {
     event.preventDefault();
-    mouse.set( ( event.clientX / myCanvas.innerWidth ) * 2 - 1, - ( event.clientY / myCanvas.innerHeight ) * 2 + 1 );
-    raycaster.setFromCamera( mouse, camera );
-    var intersects = raycaster.intersectObjects( objects );
 
-    if ( intersects.length > 0 ) {
+    mouse.x = ((event.clientX - 70)/renderer.domElement.width) * 2 - 1;
+    mouse.y = ((event.clientY - 70)/renderer.domElement.height) * 2 + 1;
 
-      var intersect = intersects[ 0 ];
+    var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5);
+    vector = vector.unproject(camera);
+    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
 
-      // drag cube
-      } else {
-
-
-      }
-      render();
+    if (SELECTED) {
+      var intersects = raycaster.intersectObject(plane);
+      // console.log(intersects);
+      SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+      return;
     }
 
+    var intersects = raycaster.intersectObjects(objects);
+    if (intersects.length >  0) {
+      INTERSECTED = intersects[0].object;
+      // console.log(INTERSECTED);
+      plane.position.copy(INTERSECTED.position);
+      plane.lookAt(camera.position);
+
+    }
+
+  };
+
+
+  function onDocumentMouseDown(event) {
+    event.preventDefault();
+
+    mouse.x = ( ( event.clientX - 70 ) / renderer.domElement.width ) * 2 - 1; 
+    mouse.y = - ( ( event.clientY - 50 ) / renderer.domElement.height ) * 2 + 1;
+
+    var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5);
+
+    // console.log(vector);
+    // console.log(event.clientX);
+    // console.log(event.clientY);
+    // console.log(myCanvas.innerHeight());
+    // console.log(mouse.x);
+    // console.log(mouse.y);
+
+    vector = vector.unproject(camera);
+    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+    // var intersects = raycaster.intersectObjects(objects);
+    var intersects = raycaster.intersectObject(cube);
+    if (intersects.length > 0) {
+
+      // console.log(intersects[0]);
+      // intersects[0].object.material.transparent = true;
+      // intersects[0].object.material.opacity = 0.1;
+      intersects[0].object.material.color.setHex(0xff0000);
+
+      SELECTED = intersects[ 0 ].object;
+      // console.log(SELECTED);
+      var intersects = raycaster.intersectObject( plane );
+      console.log(intersects[0]);
+      offset.copy( intersects[ 0 ].point ).sub( plane.position );
+
+      // myCanvas.style.cursor = 'move';
+    }
+    // call render loop
+    render();
+  };
+
+  function onDocumentMouseUp(event) {
+    event.preventDefault();
+
+    if ( INTERSECTED ) {
+      plane.position.copy( INTERSECTED.position );
+      SELECTED = null;
+    }
+
+  };
+  
+  // call render loop
+  render();
 });
 
-
-// t.text array: true default: []
-// t.string array: true default: []
 
 
