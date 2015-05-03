@@ -18,13 +18,13 @@ $(document).ready(function(){
   var SELECTED;
   var INTERSECTED;
 
-  // Define scene and camera locker view >>>>>>>>>>>>>>>
+  // Define scene and camera
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
   camera.position.set( 250, 400, 650 );
   camera.lookAt( new THREE.Vector3() );
 
-  // Define renderer locker view >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // Define renderer
   var renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setSize( myCanvas.innerWidth(), myCanvas.innerHeight() );
   renderer.setClearColor( 0xf0f0f0 );
@@ -87,7 +87,7 @@ $(document).ready(function(){
 
     scene.add( cube );
     objects.push(cube);
-
+    console.log(objects);
     // $.post('/boxes', {name: 'box'+box_id, x: 2, y: 2, z: 2})
   }
   
@@ -96,7 +96,7 @@ $(document).ready(function(){
     addCube();
   });
 
-  // Lighting locker view >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // Lighting
   var ambientLight = new THREE.AmbientLight( 0x606060 );
   scene.add( ambientLight );
 
@@ -105,8 +105,12 @@ $(document).ready(function(){
   scene.add( directionalLight );
 
   // define render/animation loop
+  var animate = function() {
+    requestAnimationFrame( animate );
+    render();
+  };
+
   var render = function () {
-    requestAnimationFrame( render );
 
     // scene.traverse(function(e) {
     //   if (e instanceof THREE.Mesh) {
@@ -121,8 +125,8 @@ $(document).ready(function(){
   function onDocumentMouseMove(event) {
     event.preventDefault();
 
-    mouse.x = ((event.clientX - 70)/renderer.domElement.width) * 2 - 1;
-    mouse.y = ((event.clientY - 70)/renderer.domElement.height) * 2 + 1;
+    mouse.x = ( ( event.clientX - 70 ) / renderer.domElement.width ) * 2 - 1; 
+    mouse.y = - ( ( event.clientY - 50 ) / renderer.domElement.height ) * 2 + 1;
 
     var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5);
     vector = vector.unproject(camera);
@@ -130,7 +134,6 @@ $(document).ready(function(){
 
     if (SELECTED) {
       var intersects = raycaster.intersectObject(plane);
-      // console.log(intersects);
       SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
       return;
     }
@@ -138,12 +141,11 @@ $(document).ready(function(){
     var intersects = raycaster.intersectObjects(objects);
     if (intersects.length >  0) {
       INTERSECTED = intersects[0].object;
-      // console.log(INTERSECTED);
-      plane.position.copy(INTERSECTED.position);
-      plane.lookAt(camera.position);
-
+      // plane.position.copy(INTERSECTED.position);
+    //   plane.lookAt(camera.position);
     }
 
+    render();
   };
 
 
@@ -154,29 +156,18 @@ $(document).ready(function(){
     mouse.y = - ( ( event.clientY - 50 ) / renderer.domElement.height ) * 2 + 1;
 
     var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5);
-
-    // console.log(vector);
-    // console.log(event.clientX);
-    // console.log(event.clientY);
-    // console.log(myCanvas.innerHeight());
-    // console.log(mouse.x);
-    // console.log(mouse.y);
-
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     // var intersects = raycaster.intersectObjects(objects);
-    var intersects = raycaster.intersectObject(cube);
-    if (intersects.length > 0) {
+    var intersects = raycaster.intersectObjects(objects);
+    if (intersects.length > 0 && intersects[0] != plane) {
 
-      // console.log(intersects[0]);
       // intersects[0].object.material.transparent = true;
       // intersects[0].object.material.opacity = 0.1;
       intersects[0].object.material.color.setHex(0xff0000);
 
       SELECTED = intersects[ 0 ].object;
-      // console.log(SELECTED);
       var intersects = raycaster.intersectObject( plane );
-      console.log(intersects[0]);
       offset.copy( intersects[ 0 ].point ).sub( plane.position );
 
       // myCanvas.style.cursor = 'move';
@@ -188,15 +179,17 @@ $(document).ready(function(){
   function onDocumentMouseUp(event) {
     event.preventDefault();
 
-    if ( INTERSECTED ) {
-      plane.position.copy( INTERSECTED.position );
-      SELECTED = null;
-    }
+    SELECTED = null;
+
+    // if ( INTERSECTED ) {
+    //   plane.position.copy( INTERSECTED.position );
+    //   SELECTED = null;
+    // }
 
   };
   
   // call render loop
-  render();
+  animate();
 });
 
 
