@@ -134,16 +134,17 @@ $(document).ready(function(){
 
     if (SELECTED) {
       var intersects = raycaster.intersectObject(plane);
-      SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+      var addVector = new THREE.Vector3(0,25,0);
+      SELECTED.position.copy( intersects[ 0 ].point ).add(addVector);
       return;
     }
 
-    var intersects = raycaster.intersectObjects(objects);
-    if (intersects.length >  0) {
-      INTERSECTED = intersects[0].object;
-      // plane.position.copy(INTERSECTED.position);
-    //   plane.lookAt(camera.position);
-    }
+    // var intersects = raycaster.intersectObjects(objects);
+    // if (intersects.length >  0) {
+    //   INTERSECTED = intersects[0].object;
+    //   // plane.position.copy(INTERSECTED.position);
+    // //   plane.lookAt(camera.position);
+    // }
 
     render();
   };
@@ -167,18 +168,19 @@ $(document).ready(function(){
       intersects[0].object.material.color.setHex(0xff0000);
 
       SELECTED = intersects[ 0 ].object;
-      var intersects = raycaster.intersectObject( plane );
-      offset.copy( intersects[ 0 ].point ).sub( plane.position );
+      // var intersects = raycaster.intersectObject( plane );
+      // offset.copy( intersects[ 0 ].point );
 
       // myCanvas.style.cursor = 'move';
     }
-    // call render loop
+
     render();
   };
 
   function onDocumentMouseUp(event) {
     event.preventDefault();
 
+    SELECTED.material.color.setHex(0xdeae66);
     SELECTED = null;
 
     // if ( INTERSECTED ) {
