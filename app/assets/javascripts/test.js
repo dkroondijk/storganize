@@ -30,10 +30,14 @@ $(document).ready(function(){
   renderer.setClearColor( 0xf0f0f0 );
   myCanvas.append( renderer.domElement );
 
+  var leftMargin = renderer.domElement.getBoundingClientRect().left;
+  var topMargin = renderer.domElement.getBoundingClientRect().top;
+
   // renderer.setPixelRatio( window.devicePixelRatio );
   renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
   renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
   renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
 
   // grid
   var lockerLength = $('#my-canvas').data('locker').length
@@ -62,12 +66,14 @@ $(document).ready(function(){
   scene.add( line );
 
   var geometry = new THREE.PlaneBufferGeometry( 500, 500 );
+  // rotate plane from vertical to horizontal about x-axis
   geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
   var plane = new THREE.Mesh( geometry );
   plane.visible = true;
   scene.add( plane );
   objects.push( plane );
+
 
   // Define 'add cube' function
   var addCube = function() {
@@ -87,14 +93,16 @@ $(document).ready(function(){
 
     scene.add( cube );
     objects.push(cube);
-    console.log(objects);
+    
     // $.post('/boxes', {name: 'box'+box_id, x: 2, y: 2, z: 2})
   }
+
   
   // addCube button
   $('#add-cube-btn').click(function(){
     addCube();
   });
+
 
   // Lighting
   var ambientLight = new THREE.AmbientLight( 0x606060 );
@@ -125,26 +133,28 @@ $(document).ready(function(){
   function onDocumentMouseMove(event) {
     event.preventDefault();
 
-    mouse.x = ( ( event.clientX - 70 ) / renderer.domElement.width ) * 2 - 1; 
-    mouse.y = - ( ( event.clientY - 50 ) / renderer.domElement.height ) * 2 + 1;
+    mouse.x = ( ( event.clientX - leftMargin ) / renderer.domElement.width ) * 2 - 1; 
+    mouse.y = - ( ( event.clientY - topMargin ) / renderer.domElement.height ) * 2 + 1;
 
     var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5);
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
 
     if (SELECTED) {
-      var intersects = raycaster.intersectObject(plane);
-      var addVector = new THREE.Vector3(0,25,0);
-      SELECTED.position.copy( intersects[ 0 ].point ).add(addVector);
-      return;
-    }
 
-    // var intersects = raycaster.intersectObjects(objects);
-    // if (intersects.length >  0) {
-    //   INTERSECTED = intersects[0].object;
-    //   // plane.position.copy(INTERSECTED.position);
-    // //   plane.lookAt(camera.position);
-    // }
+      var intersects = raycaster.intersectObjects(objects);
+
+      if (intersects[1] != SELECTED) {
+        var addVector = new THREE.Vector3(0,25,0);
+        SELECTED.position.copy( intersects[ 1 ].point ).add(addVector);
+        return;        
+      } else {
+        var intersects = raycaster.intersectObject(plane);
+        var addVector = new THREE.Vector3(0,25,0);
+        SELECTED.position.copy( intersects[ 0 ].point ).add(addVector);
+        return;
+      }
+    }
 
     render();
   };
@@ -153,13 +163,12 @@ $(document).ready(function(){
   function onDocumentMouseDown(event) {
     event.preventDefault();
 
-    mouse.x = ( ( event.clientX - 70 ) / renderer.domElement.width ) * 2 - 1; 
-    mouse.y = - ( ( event.clientY - 50 ) / renderer.domElement.height ) * 2 + 1;
+    mouse.x = ( ( event.clientX - leftMargin ) / renderer.domElement.width ) * 2 - 1; 
+    mouse.y = - ( ( event.clientY - topMargin ) / renderer.domElement.height ) * 2 + 1;
 
     var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5);
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-    // var intersects = raycaster.intersectObjects(objects);
     var intersects = raycaster.intersectObjects(objects);
     if (intersects.length > 0 && intersects[0] != plane) {
 
@@ -168,8 +177,6 @@ $(document).ready(function(){
       intersects[0].object.material.color.setHex(0xff0000);
 
       SELECTED = intersects[ 0 ].object;
-      // var intersects = raycaster.intersectObject( plane );
-      // offset.copy( intersects[ 0 ].point );
 
       // myCanvas.style.cursor = 'move';
     }
@@ -183,14 +190,9 @@ $(document).ready(function(){
     SELECTED.material.color.setHex(0xdeae66);
     SELECTED = null;
 
-    // if ( INTERSECTED ) {
-    //   plane.position.copy( INTERSECTED.position );
-    //   SELECTED = null;
-    // }
-
   };
   
-  // call render loop
+  // call animation loop
   animate();
 });
 
