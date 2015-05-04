@@ -144,14 +144,17 @@ $(document).ready(function(){
 
       var intersects = raycaster.intersectObjects(objects);
 
-      if (intersects[1] != SELECTED) {
-        var addVector = new THREE.Vector3(0,25,0);
-        SELECTED.position.copy( intersects[ 1 ].point ).add(addVector);
+      if (intersects.length > 1) {
+        var intersect = intersects[1];
+        console.log(intersect);
+        SELECTED.position.copy( intersect.point ).add(intersect.face.normal);
+        SELECTED.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
         return;        
       } else {
         var intersects = raycaster.intersectObject(plane);
-        var addVector = new THREE.Vector3(0,25,0);
-        SELECTED.position.copy( intersects[ 0 ].point ).add(addVector);
+        var intersect = intersects[0];
+        SELECTED.position.copy( intersect.point ).add(intersect.face.normal);
+        SELECTED.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
         return;
       }
     }
@@ -170,14 +173,13 @@ $(document).ready(function(){
     vector = vector.unproject(camera);
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objects);
-    if (intersects.length > 0 && intersects[0] != plane) {
+    var intersect = intersects[0];
 
-      // intersects[0].object.material.transparent = true;
-      // intersects[0].object.material.opacity = 0.1;
-      intersects[0].object.material.color.setHex(0xff0000);
+    if (intersects.length > 0 && intersect.object != plane) {
+      
+      intersect.object.material.color.setHex(0xff0000);
 
-      SELECTED = intersects[ 0 ].object;
-
+      SELECTED = intersect.object;
       // myCanvas.style.cursor = 'move';
     }
 
