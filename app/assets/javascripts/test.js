@@ -23,6 +23,7 @@ $(document).ready(function(){
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
   camera.position.set( 250, 400, 650 );
   camera.lookAt( new THREE.Vector3() );
+  // camera.lookAt( scene.position );
 
   // Define renderer
   var renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -46,18 +47,21 @@ $(document).ready(function(){
   var gridLength = lockerLength * 25, step = 50;
   var gridWidth = lockerWidth * 25, step = 50;
 
+  var gridLengthModulus = gridLength % 50;
+  var gridWidthModulus = gridWidth % 50;
+
   var gridGeometry = new THREE.Geometry();
 
-  for ( var i = -gridWidth; i <= gridWidth; i += step ) {
+  for ( var i = -gridWidth - gridWidthModulus; i <= gridWidth - gridWidthModulus; i += step ) {
 
-    gridGeometry.vertices.push( new THREE.Vector3( i, 0, - gridLength ) );
-    gridGeometry.vertices.push( new THREE.Vector3( i, 0,   gridLength ) );
+    gridGeometry.vertices.push( new THREE.Vector3( i, 0, - gridLength - gridLengthModulus ) );
+    gridGeometry.vertices.push( new THREE.Vector3( i, 0,   gridLength - gridLengthModulus ) );
   }
 
-  for ( var i = - gridLength; i <= gridLength; i += step ) {
+  for ( var i = -gridLength - gridLengthModulus; i <= gridLength - gridLengthModulus; i += step ) {
 
-    gridGeometry.vertices.push( new THREE.Vector3( - gridWidth, 0, i ) );
-    gridGeometry.vertices.push( new THREE.Vector3(   gridWidth, 0, i ) );
+    gridGeometry.vertices.push( new THREE.Vector3( - gridWidth - gridWidthModulus, 0, i ) );
+    gridGeometry.vertices.push( new THREE.Vector3(   gridWidth - gridWidthModulus, 0, i ) );
   }
 
   var gridMaterial = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
