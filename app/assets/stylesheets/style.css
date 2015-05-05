@@ -29,3 +29,8 @@ canvas {
 .box-form {
   float: left;
 }
+
+#gui-container {
+  display: inline-block;
+  position: fixed;
+}

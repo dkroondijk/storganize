@@ -76,7 +76,7 @@ $(document).ready(function(){
     geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
     plane = new THREE.Mesh( geometry );
-    plane.visible = true;
+    plane.visible = false;
     scene.add( plane );
     objects.push( plane );
   };
@@ -247,10 +247,13 @@ $(document).ready(function(){
 
 
   // GUI
-  var gui = new dat.GUI();
+  var gui = new dat.GUI({ autoPlace: false });
   gui.add(controls, "exportScene");
   gui.add(controls, "clearScene");
   gui.add(controls, "importScene");
+
+  var guiContainer = document.getElementById('gui-container');
+  guiContainer.appendChild(gui.domElement);
 
   
   initGridPlane();
