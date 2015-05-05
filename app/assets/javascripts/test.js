@@ -14,7 +14,6 @@ $(document).ready(function(){
   var raycaster = new THREE.Raycaster();
   var mouse = new THREE.Vector2();
   var objects = [];
-  var offset = new THREE.Vector3();
   var SELECTED;
   var INTERSECTED;
 
@@ -23,7 +22,6 @@ $(document).ready(function(){
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
   camera.position.set( 250, 400, 650 );
   camera.lookAt( new THREE.Vector3() );
-  // camera.lookAt( scene.position );
 
   // Define renderer
   var renderer = new THREE.WebGLRenderer( { antialias: true } );

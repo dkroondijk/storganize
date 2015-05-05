@@ -36,6 +36,9 @@ gem 'threejs-rails', git: 'git://github.com/marvindanig/threejs-rails.git'
 
 gem 'jquery-turbolinks'
 
+# nested form attributes
+gem 'cocoon'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

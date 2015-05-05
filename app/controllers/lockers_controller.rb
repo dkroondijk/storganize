@@ -8,7 +8,7 @@ class LockersController < ApplicationController
   end
 
   def create
-    @locker = Locker.new(locker_params)
+    @locker = current_user.lockers.new(locker_params)
     if @locker.save
       redirect_to locker_path(@locker), notice: "New Locker Added!"
     else
@@ -19,6 +19,7 @@ class LockersController < ApplicationController
 
   def show
     @locker = Locker.find(params[:id])
+    @box = Box.new
   end
 
 
