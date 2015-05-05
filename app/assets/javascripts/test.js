@@ -40,43 +40,46 @@ $(document).ready(function(){
   renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 
-  // grid
-  var lockerLength = $('#my-canvas').data('locker').length
-  var lockerWidth = $('#my-canvas').data('locker').width
+  // Initialize grid and plane
+  var initGridPlane = function() {
 
-  var gridLength = lockerLength * 25, step = 50;
-  var gridWidth = lockerWidth * 25, step = 50;
+    var lockerLength = $('#my-canvas').data('locker').length
+    var lockerWidth = $('#my-canvas').data('locker').width
 
-  var gridLengthModulus = gridLength % 50;
-  var gridWidthModulus = gridWidth % 50;
+    var gridLength = lockerLength * 25, step = 50;
+    var gridWidth = lockerWidth * 25, step = 50;
 
-  var gridGeometry = new THREE.Geometry();
+    var gridLengthModulus = gridLength % 50;
+    var gridWidthModulus = gridWidth % 50;
 
-  for ( var i = -gridWidth - gridWidthModulus; i <= gridWidth - gridWidthModulus; i += step ) {
+    var gridGeometry = new THREE.Geometry();
 
-    gridGeometry.vertices.push( new THREE.Vector3( i, 0, - gridLength - gridLengthModulus ) );
-    gridGeometry.vertices.push( new THREE.Vector3( i, 0,   gridLength - gridLengthModulus ) );
-  }
+    for ( var i = -gridWidth - gridWidthModulus; i <= gridWidth - gridWidthModulus; i += step ) {
 
-  for ( var i = -gridLength - gridLengthModulus; i <= gridLength - gridLengthModulus; i += step ) {
+      gridGeometry.vertices.push( new THREE.Vector3( i, 0, - gridLength - gridLengthModulus ) );
+      gridGeometry.vertices.push( new THREE.Vector3( i, 0,   gridLength - gridLengthModulus ) );
+    }
 
-    gridGeometry.vertices.push( new THREE.Vector3( - gridWidth - gridWidthModulus, 0, i ) );
-    gridGeometry.vertices.push( new THREE.Vector3(   gridWidth - gridWidthModulus, 0, i ) );
-  }
+    for ( var i = -gridLength - gridLengthModulus; i <= gridLength - gridLengthModulus; i += step ) {
 
-  var gridMaterial = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
+      gridGeometry.vertices.push( new THREE.Vector3( - gridWidth - gridWidthModulus, 0, i ) );
+      gridGeometry.vertices.push( new THREE.Vector3(   gridWidth - gridWidthModulus, 0, i ) );
+    }
 
-  var line = new THREE.Line( gridGeometry, gridMaterial, THREE.LinePieces );
-  scene.add( line );
+    var gridMaterial = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2, transparent: true } );
 
-  var geometry = new THREE.PlaneBufferGeometry( 500, 500 );
-  // rotate plane from vertical to horizontal about x-axis
-  geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+    var line = new THREE.Line( gridGeometry, gridMaterial, THREE.LinePieces );
+    scene.add( line );
 
-  var plane = new THREE.Mesh( geometry );
-  plane.visible = true;
-  scene.add( plane );
-  objects.push( plane );
+    var geometry = new THREE.PlaneBufferGeometry( 500, 500 );
+    // rotate plane from vertical to horizontal about x-axis
+    geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+
+    plane = new THREE.Mesh( geometry );
+    plane.visible = true;
+    scene.add( plane );
+    objects.push( plane );
+  };
 
 
   // Define 'add cube' function
@@ -109,7 +112,7 @@ $(document).ready(function(){
 
 
   // Lighting
-  var ambientLight = new THREE.AmbientLight( 0x606060 );
+  var ambientLight = new THREE.AmbientLight( 0x0c0c0c );
   scene.add( ambientLight );
 
   var directionalLight = new THREE.DirectionalLight( 0xffffff );
@@ -150,7 +153,6 @@ $(document).ready(function(){
 
       if (intersects.length > 1) {
         var intersect = intersects[1];
-        console.log(intersect);
         SELECTED.position.copy( intersect.point ).add(intersect.face.normal);
         SELECTED.position.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
         return;        
@@ -178,6 +180,8 @@ $(document).ready(function(){
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objects);
     var intersect = intersects[0];
+    console.log(intersects);
+    // console.log(objects);
 
     if (intersects.length > 0 && intersect.object != plane) {
       
@@ -197,7 +201,60 @@ $(document).ready(function(){
     SELECTED = null;
 
   };
+
+
+  // Scene Exporting/Importing
+  var controls = new function () {
+    this.exportScene = function () {
+        var exporter = new THREE.SceneExporter();
+        var sceneJson = JSON.stringify(exporter.parse(scene));
+        localStorage.setItem('scene', sceneJson);
+        // console.log(localStorage);
+    }
+
+    this.clearScene = function () {
+        scene = new THREE.Scene();
+    }
+
+    this.importScene = function () {
+        var json = (localStorage.getItem('scene'));
+        // console.log(json);
+        var sceneLoader = new THREE.SceneLoader();
+
+        sceneLoader.parse(JSON.parse(json), function (e) {
+
+            var sceneItems = e.scene.children;
+            objects = [];
+            
+            for (var i = 0; i < sceneItems.length; i += 1) {
+              if(sceneItems[i] instanceof THREE.Mesh) {
+                objects.push(sceneItems[i]);
+              }
+            }
+            // console.log(objects);
+
+            // objects = Object.keys(cubes).map(function(key) { 
+            //   return cubes[key];
+            // });
+
+            scene = e.scene;
+        }, '.');
+
+        initGridPlane();
+        animate();
+    }
+  };
+
+
+  // GUI
+  var gui = new dat.GUI();
+  gui.add(controls, "exportScene");
+  gui.add(controls, "clearScene");
+  gui.add(controls, "importScene");
+
   
+  initGridPlane();
+
   // call animation loop
   animate();
 });
