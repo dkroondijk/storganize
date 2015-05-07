@@ -1,23 +1,48 @@
 class BoxesController < ApplicationController
 
+  def index
+    
+  end
+
 
   def create
     @locker = Locker.find(params[:locker_id])
     @box = Box.new(box_params)
     @box.locker = @locker
+    @box.save
 
-    if @box.save
-      redirect_to locker_path(@locker), notice: "Box Added"
+    # respond_to do |format|
+    #   if @box.save
+    #     format.html { redirect_to locker_path(@locker), notice: "Box Added" }
+    #     format.js { render }
+    #   else
+    #     # render "/lockers/#{@locker.id}"
+    #     format.html { 
+    #       render "lockers/show"
+    #       flash[:alert] = "Can't add box!"
+    #     }
+    #     format.js { render }
+    #   end   
+    # end
+  end
+
+  def update
+    @box = Box.find(params[:id])
+    if @box.update(box_params)
+      render "/lockers/show"
     else
-      render "/lockers/#{@locker.id}"
-      flash[:alert] = "Can't add box!"
-    end  
+      render "/lockers/show"
+    end
+  end
+
+  def show
+    
   end
 
 
   private
 
   def box_params
-    params.require(:box).permit(:name, {items_attributes: [:name, :id, :_destroy]})
+    params.require(:box).permit(:name, :cube_id, {items_attributes: [:name, :id, :_destroy]})
   end
 end

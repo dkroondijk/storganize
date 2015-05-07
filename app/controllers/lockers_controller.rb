@@ -22,10 +22,20 @@ class LockersController < ApplicationController
     @box = Box.new
   end
 
+  def update
+    @locker = Locker.find(params[:id])
+    if @locker.update(locker_params)
+      render "/lockers/show"
+    else
+      render :show
+      flash[:alert] = "Can't save locker"
+    end
+  end
+
 
   private
 
   def locker_params
-    params.require(:locker).permit(:name, :length, :width)
+    params.require(:locker).permit(:name, :length, :width, :scene_json)
   end
 end

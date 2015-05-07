@@ -14,6 +14,7 @@ $(document).ready(function(){
   var raycaster = new THREE.Raycaster();
   var mouse = new THREE.Vector2();
   var objects = [];
+  var cubes = [];
   var SELECTED;
   var INTERSECTED;
 
@@ -41,6 +42,7 @@ $(document).ready(function(){
   // Initialize grid and plane
   var initGridPlane = function() {
 
+    var lockerName = $('#my-canvas').data('locker').name
     var lockerLength = $('#my-canvas').data('locker').length
     var lockerWidth = $('#my-canvas').data('locker').width
 
@@ -81,32 +83,84 @@ $(document).ready(function(){
 
 
   // Define 'add cube' function
-  var addCube = function() {
+  // var addCube = function() {
+  //   var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
+  //   var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } );
+  //   var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+  //   window.cube = cube;
+  //   var cube_id = cube.id
+  //   var locker_id = $('#my-canvas').data('locker').id;
+
+  //   cube.position.x = Math.floor((Math.random() * 10) * 25);
+  //   cube.position.z = Math.floor((Math.random() * 10) * 25);
+  //   cube.position.y = 25;
+
+  //   scene.add( cube );
+  //   objects.push(cube);
+  //   cubes.push(cube);
+
+    // var boxParams = {
+    //   box: {cube_id: cube_id}
+    // };
+    
+    // $.ajax({
+    //   url: '/lockers/'+locker_id+'/boxes/' + storganize.locker.boxes[storganize.locker.boxes.length-1].id,
+    //   method: 'put',
+    //   data: boxParams,      
+    // });    
+  // }
+
+
+  $('#new_box').submit(function(event){
+    event.preventDefault();
+
     var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
     var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } );
     var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-    window.cube = cube;
-    var box_id = cube.id
+    // window.cube = cube;
+    var cube_id = cube.id;
+    var locker_id = $('#my-canvas').data('locker').id;
 
     cube.position.x = Math.floor((Math.random() * 10) * 25);
     cube.position.z = Math.floor((Math.random() * 10) * 25);
     cube.position.y = 25;
-    
-    // cube.position.x = 0;
-    // cube.position.y = 25;
-    // cube.position.z = 25;
 
     scene.add( cube );
     objects.push(cube);
-    
-    // $.post('/boxes', {name: 'box'+box_id, x: 2, y: 2, z: 2})
-  }
+    cubes.push(cube);    
 
+    $(this).find('#box_cube_id').val(cube_id);
+    var data = $(this).serialize();
+    $.post('/lockers/'+locker_id+'/boxes/', data, function(){
+      $.get('/lockers/'+locker_id);
+    });
+
+  });
   
   // addCube button
-  $('#add-cube-btn').click(function(){
-    addCube();
-  });
+  // $('#add-cube-btn').click(function(){
+  //   if($('#box_name').val() != "") {
+  //   addCube();      
+  //   }
+  // });
+
+  // var lockerBoxes = storganize.locker.boxes;
+  // console.log(lockerBoxes);
+
+  // $('#save-locker-btn').click(function(){
+  //   for(var = i; i < lockerBoxes.length; i += 1){
+
+  //     for(var = j; j < cubes.length; j += 1){
+  //       if(lockerBoxes[i].cube_id === cubes[j].id){
+  //         $.ajax({
+  //           url: '/lockers/'+locker_id+'/boxes/' + lockerBoxes[i].id,
+  //           method: 'put',
+  //           data: boxParams,
+  //         })          
+  //       } 
+  //     }
+  //   }
+  // });
 
 
   // Lighting
@@ -178,8 +232,6 @@ $(document).ready(function(){
     var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
     var intersects = raycaster.intersectObjects(objects);
     var intersect = intersects[0];
-    console.log(intersects);
-    // console.log(objects);
 
     if (intersects.length > 0 && intersect.object != plane) {
       
@@ -204,10 +256,25 @@ $(document).ready(function(){
   // Scene Exporting/Importing
   var controls = new function () {
     this.exportScene = function () {
-        var exporter = new THREE.SceneExporter();
-        var sceneJson = JSON.stringify(exporter.parse(scene));
-        localStorage.setItem('scene', sceneJson);
-        // console.log(localStorage);
+
+      var lockerName = $('#my-canvas').data('locker').name
+      var lockerLength = $('#my-canvas').data('locker').length
+      var lockerWidth = $('#my-canvas').data('locker').width
+      var lockerId = $('#my-canvas').data('locker').id;
+
+      var exporter = new THREE.SceneExporter();
+      var sceneJson = JSON.stringify(exporter.parse(scene));
+      // localStorage.setItem('scene', sceneJson);
+
+      var lockerParams = {
+        locker: {scene_json: sceneJson}
+      };
+
+      $.ajax({
+        url: '/lockers/'+lockerId,
+        method: 'put',
+        data: lockerParams,
+      });
     }
 
     this.clearScene = function () {
@@ -215,8 +282,9 @@ $(document).ready(function(){
     }
 
     this.importScene = function () {
-        var json = (localStorage.getItem('scene'));
-        // console.log(json);
+        // var json = (localStorage.getItem('scene'));
+        var json = storganize.locker.scene_json;
+        
         var sceneLoader = new THREE.SceneLoader();
 
         sceneLoader.parse(JSON.parse(json), function (e) {
@@ -229,12 +297,11 @@ $(document).ready(function(){
                 objects.push(sceneItems[i]);
               }
             }
-            // console.log(objects);
 
             // objects = Object.keys(cubes).map(function(key) { 
             //   return cubes[key];
             // });
-
+            window.objects = objects;
             scene = e.scene;
         }, '.');
 
@@ -242,6 +309,16 @@ $(document).ready(function(){
         animate();
     }
   };
+
+
+  // Highlight cube when box is clicked in list on page
+  $('.well').click(function(){
+    for (var i = 0; i < objects.length; i += 1) {      
+      if(objects[i].id === $(this).data('box').cube_id) {
+        objects[i].material.color.setHex(0xff0000);
+      }
+    }
+  });
 
 
   // GUI

@@ -1,0 +1,6 @@
+<% if @box.errors.any? %>
+  $('.box-form').html("<%= j render '/boxes/form' %>")
+<% else %>
+  <% @box = Box.new %>
+  $('.box-form').html("<%= j render '/boxes/form' %>")
+<% end %>
