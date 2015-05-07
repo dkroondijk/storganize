@@ -9,21 +9,21 @@ class BoxesController < ApplicationController
     @locker = Locker.find(params[:locker_id])
     @box = Box.new(box_params)
     @box.locker = @locker
-    @box.save
 
-    # respond_to do |format|
-    #   if @box.save
-    #     format.html { redirect_to locker_path(@locker), notice: "Box Added" }
-    #     format.js { render }
-    #   else
-    #     # render "/lockers/#{@locker.id}"
-    #     format.html { 
-    #       render "lockers/show"
-    #       flash[:alert] = "Can't add box!"
-    #     }
-    #     format.js { render }
-    #   end   
-    # end
+    respond_to do |format|
+      if @box.save
+        format.html { redirect_to locker_path(@locker), notice: "Box Added" }
+        format.json { render @box }
+      else
+        # render "/lockers/#{@locker.id}"
+        format.html { 
+          render "lockers/show"
+          flash[:alert] = "Can't add box!"
+        }
+        format.js { render }
+      end   
+    end
+
   end
 
   def update
