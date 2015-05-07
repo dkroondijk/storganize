@@ -8,6 +8,7 @@ $(document).ready(function(){
       cubes = [], // a cube is defined by cubeGeometry and cubeMaterial
       SELECTED,
       INTERSECTED;
+      x = 0;
 
   // Define scene and camera
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(),1 );
@@ -155,8 +156,8 @@ $(document).ready(function(){
     event.preventDefault();
 
     SELECTED.material.color.setHex(0xdeae66);
-    
-    console.log(SELECTED.position)
+
+    console.log( SELECTED.position )
     // DO ME: ajax post/patch to update the coordinates of the box
 
 
@@ -177,10 +178,17 @@ $(document).ready(function(){
 
   $('#new_box').submit(function(event){
     event.preventDefault();
-    new_cube();
+
+    $.get( "/lockers/1/boxes", function( data ) {
+      for(var i = 0; i < data.length; i += 1){
+        new_cube(data[i].name)
+      }
+    });
+    cube = new_cube();
     // window.cube = cube;
     // var cube_id = cube.id;
     var locker_id = $('#my-canvas').data('locker').id;
+
 
     // $(this).find('#box_cube_id').val(cube_id);
     // var data = $(this).serialize();
@@ -192,7 +200,7 @@ $(document).ready(function(){
     // });
   });
 
-  var new_cube = function(){
+  var new_cube = function(cube_name, x, y, z){
     var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 ),
         cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } ),
         cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
@@ -204,8 +212,9 @@ $(document).ready(function(){
     scene.add( cube );
     objects.push(cube);
     cubes.push(cube);
-  }
 
+    return cube_name
+  }
 
   initGridPlane();
   animate();

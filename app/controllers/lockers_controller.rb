@@ -3,7 +3,6 @@ class LockersController < ApplicationController
 
   def index
     @lockers = Locker.all
-
     @locker = Locker.new
   end
 
