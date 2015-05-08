@@ -80,38 +80,37 @@ $(document).ready(function(){
     plane.visible = false;
     scene.add( plane );
     objects.push( plane );
+
+    var lockerBoxes = storganize.locker.boxes;
+
+    for(var i = 0; i < lockerBoxes.length; i += 1) {
+      addCube(newCube(lockerBoxes[i].name, lockerBoxes[i].x, lockerBoxes[i].y, lockerBoxes[i].z))
+    }
+
   };
 
   $('#new_box').submit(function(event){
     event.preventDefault();
 
-    var cube = newCube(1, 25, 25, 25);
+    var cube = newCube($("#box_name").val(), 25, 25, 25);
     addCube(cube);
     // addCube(newCube(1, 25, 25, 25));
 
-    console.log(cube.position);
+    var data = {};
+    data["box"] = {};
+    data["box"]["x"] = cube.position.x;
+    data["box"]["y"] = cube.position.y;
+    data["box"]["z"] = cube.position.z;
+    data["box"]["name"] = cube.name;
 
-    // var boxParams = {
-    //   box: {x: cube.position.x, y: cube.position.y, z: cube.position.z}
-    // };
-
-
-    var data = $(this).serializeArray();
-    data.push({box: {x: cube.position.x}});
-    $.param(data);
-    console.log(data)
-
-    // $(this).find('#box_cube_id').val(cube_id);
     var locker_id = $('#my-canvas').data('locker').id;
     $.post('/lockers/'+locker_id+'/boxes/', data, function(){
       $.get('/lockers/'+locker_id);
     });
 
-    // console.log(cube);
-
   });
 
-  var newCube = function(box_id, x, y, z) {
+  var newCube = function(name, x, y, z) {
     var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
     var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } );
     var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
@@ -119,6 +118,10 @@ $(document).ready(function(){
     cube.position.x = x;
     cube.position.y = y;
     cube.position.z = z;
+    // cube.name = $("#box_name").val();
+    cube.name = name;
+    cube.unique_id = "blah";
+
 
     return cube;
   }
@@ -237,6 +240,7 @@ $(document).ready(function(){
       intersect.object.material.color.setHex(0xff0000);
 
       SELECTED = intersect.object;
+      // console.log(SELECTED);
       // myCanvas.style.cursor = 'move';
     }
 
@@ -247,6 +251,31 @@ $(document).ready(function(){
     event.preventDefault();
 
     SELECTED.material.color.setHex(0xdeae66);
+    // console.log(SELECTED);
+
+    var data = {};
+    data["box"] = {};
+    data["box"]["x"] = SELECTED.position.x;
+    data["box"]["y"] = SELECTED.position.y;
+    data["box"]["z"] = SELECTED.position.z;
+
+    console.log(SELECTED);
+
+    var lockerBoxes = storganize.locker.boxes;
+    var locker_id = storganize.locker.id;
+
+    for (var i = 0; i < lockerBoxes.length; i += 1) {
+      if (lockerBoxes[i].name === SELECTED.name){
+        var id = lockerBoxes[i].id;
+      }
+    }
+
+    $.ajax({
+      url: '/lockers/'+locker_id+'/boxes/' + id,
+      method: 'put',
+      data: data,
+    });
+
     SELECTED = null;
 
   };

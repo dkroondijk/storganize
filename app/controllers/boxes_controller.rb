@@ -18,6 +18,7 @@ class BoxesController < ApplicationController
         format.json { render @box }
       else
         # render "/lockers/#{@locker.id}"
+        
         format.html { 
           render "lockers/show"
           flash[:alert] = "Can't add box!"

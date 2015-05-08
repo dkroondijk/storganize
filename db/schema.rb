@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506052845) do
+ActiveRecord::Schema.define(version: 20150508024215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "boxes", force: :cascade do |t|
     t.string   "name"
-    t.integer  "cube_id"
+    t.string   "cube_id"
     t.integer  "x"
     t.integer  "y"
     t.integer  "z"
