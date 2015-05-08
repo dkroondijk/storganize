@@ -1,7 +1,9 @@
 class BoxesController < ApplicationController
 
   def index
-    
+    @locker = Locker.find(params[:locker_id])
+    @boxes = @locker.boxes
+    render json: @boxes
   end
 
 
@@ -43,6 +45,6 @@ class BoxesController < ApplicationController
   private
 
   def box_params
-    params.require(:box).permit(:name, :cube_id, {items_attributes: [:name, :id, :_destroy]})
+    params.require(:box).permit(:name, :x, :y, :z, :cube_id, {items_attributes: [:name, :id, :_destroy]})
   end
 end

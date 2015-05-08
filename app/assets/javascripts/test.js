@@ -1,25 +1,17 @@
 $(document).ready(function(){
 
-  var token = $('meta[name="csrf-token"]').attr('content');
-
-  $.ajaxSetup({
-    beforeSend: function(xhr) {
-      xhr.setRequestHeader('X-CSRF-Token', token);
-    }
-  }); 
-
   // div that contains the renderer
   var myCanvas = $('#my-canvas')
 
-  var raycaster = new THREE.Raycaster();
-  var mouse = new THREE.Vector2();
-  var objects = [];
-  var cubes = [];
-  var SELECTED;
-  var INTERSECTED;
+  var scene = new THREE.Scene(),
+      raycaster = new THREE.Raycaster(),
+      mouse = new THREE.Vector2(),
+      objects = [],
+      cubes = [],
+      SELECTED,
+      NTERSECTED;
 
   // Define scene and camera
-  var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
   camera.position.set( 250, 400, 650 );
   camera.lookAt( new THREE.Vector3() );
@@ -39,8 +31,17 @@ $(document).ready(function(){
   renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 
+  // Lighting
+  var ambientLight = new THREE.AmbientLight( 0x0c0c0c );
+  scene.add( ambientLight );
+
+  var directionalLight = new THREE.DirectionalLight( 0xffffff );
+  directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
+  scene.add( directionalLight );
+
+
   // Initialize grid and plane
-  var initGridPlane = function() {
+  var initialize = function() {
 
     var lockerName = $('#my-canvas').data('locker').name
     var lockerLength = $('#my-canvas').data('locker').length
@@ -81,23 +82,53 @@ $(document).ready(function(){
     objects.push( plane );
   };
 
+  $('#new_box').submit(function(event){
+    event.preventDefault();
+
+    var cube = newCube(1, 25, 25, 25);
+    addCube(cube);
+    // addCube(newCube(1, 25, 25, 25));
+
+    console.log(cube.position);
+
+    // var boxParams = {
+    //   box: {x: cube.position.x, y: cube.position.y, z: cube.position.z}
+    // };
+
+
+    var data = $(this).serializeArray();
+    data.push({box: {x: cube.position.x}});
+    $.param(data);
+    console.log(data)
+
+    // $(this).find('#box_cube_id').val(cube_id);
+    var locker_id = $('#my-canvas').data('locker').id;
+    $.post('/lockers/'+locker_id+'/boxes/', data, function(){
+      $.get('/lockers/'+locker_id);
+    });
+
+    // console.log(cube);
+
+  });
+
+  var newCube = function(box_id, x, y, z) {
+    var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
+    var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } );
+    var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+
+    cube.position.x = x;
+    cube.position.y = y;
+    cube.position.z = z;
+
+    return cube;
+  }
 
   // Define 'add cube' function
-  // var addCube = function() {
-  //   var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
-  //   var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } );
-  //   var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-  //   window.cube = cube;
-  //   var cube_id = cube.id
-  //   var locker_id = $('#my-canvas').data('locker').id;
-
-  //   cube.position.x = Math.floor((Math.random() * 10) * 25);
-  //   cube.position.z = Math.floor((Math.random() * 10) * 25);
-  //   cube.position.y = 25;
-
-  //   scene.add( cube );
-  //   objects.push(cube);
-  //   cubes.push(cube);
+  var addCube = function(cube) {
+    
+    scene.add( cube );
+    objects.push(cube);
+    cubes.push(cube);
 
     // var boxParams = {
     //   box: {cube_id: cube_id}
@@ -108,34 +139,9 @@ $(document).ready(function(){
     //   method: 'put',
     //   data: boxParams,      
     // });    
-  // }
+  }
 
 
-  $('#new_box').submit(function(event){
-    event.preventDefault();
-
-    var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
-    var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xdeae66 } );
-    var cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-    // window.cube = cube;
-    var cube_id = cube.id;
-    var locker_id = $('#my-canvas').data('locker').id;
-
-    cube.position.x = Math.floor((Math.random() * 10) * 25);
-    cube.position.z = Math.floor((Math.random() * 10) * 25);
-    cube.position.y = 25;
-
-    scene.add( cube );
-    objects.push(cube);
-    cubes.push(cube);    
-
-    $(this).find('#box_cube_id').val(cube_id);
-    var data = $(this).serialize();
-    $.post('/lockers/'+locker_id+'/boxes/', data, function(){
-      $.get('/lockers/'+locker_id);
-    });
-
-  });
   
   // addCube button
   // $('#add-cube-btn').click(function(){
@@ -163,13 +169,6 @@ $(document).ready(function(){
   // });
 
 
-  // Lighting
-  var ambientLight = new THREE.AmbientLight( 0x0c0c0c );
-  scene.add( ambientLight );
-
-  var directionalLight = new THREE.DirectionalLight( 0xffffff );
-  directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
-  scene.add( directionalLight );
 
   // define render/animation loop
   var animate = function() {
@@ -254,61 +253,61 @@ $(document).ready(function(){
 
 
   // Scene Exporting/Importing
-  var controls = new function () {
-    this.exportScene = function () {
+  // var controls = new function () {
+  //   this.exportScene = function () {
 
-      var lockerName = $('#my-canvas').data('locker').name
-      var lockerLength = $('#my-canvas').data('locker').length
-      var lockerWidth = $('#my-canvas').data('locker').width
-      var lockerId = $('#my-canvas').data('locker').id;
+  //     var lockerName = $('#my-canvas').data('locker').name
+  //     var lockerLength = $('#my-canvas').data('locker').length
+  //     var lockerWidth = $('#my-canvas').data('locker').width
+  //     var lockerId = $('#my-canvas').data('locker').id;
 
-      var exporter = new THREE.SceneExporter();
-      var sceneJson = JSON.stringify(exporter.parse(scene));
-      // localStorage.setItem('scene', sceneJson);
+  //     var exporter = new THREE.SceneExporter();
+  //     var sceneJson = JSON.stringify(exporter.parse(scene));
+  //     // localStorage.setItem('scene', sceneJson);
 
-      var lockerParams = {
-        locker: {scene_json: sceneJson}
-      };
+  //     var lockerParams = {
+  //       locker: {scene_json: sceneJson}
+  //     };
 
-      $.ajax({
-        url: '/lockers/'+lockerId,
-        method: 'put',
-        data: lockerParams,
-      });
-    }
+  //     $.ajax({
+  //       url: '/lockers/'+lockerId,
+  //       method: 'put',
+  //       data: lockerParams,
+  //     });
+  //   }
 
-    this.clearScene = function () {
-        scene = new THREE.Scene();
-    }
+  //   this.clearScene = function () {
+  //       scene = new THREE.Scene();
+  //   }
 
-    this.importScene = function () {
-        // var json = (localStorage.getItem('scene'));
-        var json = storganize.locker.scene_json;
+  //   this.importScene = function () {
+  //       // var json = (localStorage.getItem('scene'));
+  //       var json = storganize.locker.scene_json;
         
-        var sceneLoader = new THREE.SceneLoader();
+  //       var sceneLoader = new THREE.SceneLoader();
 
-        sceneLoader.parse(JSON.parse(json), function (e) {
+  //       sceneLoader.parse(JSON.parse(json), function (e) {
 
-            var sceneItems = e.scene.children;
-            objects = [];
+  //           var sceneItems = e.scene.children;
+  //           objects = [];
             
-            for (var i = 0; i < sceneItems.length; i += 1) {
-              if(sceneItems[i] instanceof THREE.Mesh) {
-                objects.push(sceneItems[i]);
-              }
-            }
+  //           for (var i = 0; i < sceneItems.length; i += 1) {
+  //             if(sceneItems[i] instanceof THREE.Mesh) {
+  //               objects.push(sceneItems[i]);
+  //             }
+  //           }
 
-            // objects = Object.keys(cubes).map(function(key) { 
-            //   return cubes[key];
-            // });
-            window.objects = objects;
-            scene = e.scene;
-        }, '.');
+  //           // objects = Object.keys(cubes).map(function(key) { 
+  //           //   return cubes[key];
+  //           // });
+  //           window.objects = objects;
+  //           scene = e.scene;
+  //       }, '.');
 
-        initGridPlane();
-        animate();
-    }
-  };
+  //       initialize();
+  //       animate();
+  //   }
+  // };
 
 
   // Highlight cube when box is clicked in list on page
@@ -322,16 +321,16 @@ $(document).ready(function(){
 
 
   // GUI
-  var gui = new dat.GUI({ autoPlace: false });
-  gui.add(controls, "exportScene");
-  gui.add(controls, "clearScene");
-  gui.add(controls, "importScene");
+  // var gui = new dat.GUI({ autoPlace: false });
+  // gui.add(controls, "exportScene");
+  // gui.add(controls, "clearScene");
+  // gui.add(controls, "importScene");
 
-  var guiContainer = document.getElementById('gui-container');
-  guiContainer.appendChild(gui.domElement);
+  // var guiContainer = document.getElementById('gui-container');
+  // guiContainer.appendChild(gui.domElement);
 
   
-  initGridPlane();
+  initialize();
 
   // call animation loop
   animate();
