@@ -122,7 +122,6 @@ $(document).ready(function(){
     cube.name = name;
     cube.unique_id = "blah";
 
-
     return cube;
   }
 
@@ -132,45 +131,7 @@ $(document).ready(function(){
     scene.add( cube );
     objects.push(cube);
     cubes.push(cube);
-
-    // var boxParams = {
-    //   box: {cube_id: cube_id}
-    // };
-    
-    // $.ajax({
-    //   url: '/lockers/'+locker_id+'/boxes/' + storganize.locker.boxes[storganize.locker.boxes.length-1].id,
-    //   method: 'put',
-    //   data: boxParams,      
-    // });    
-  }
-
-
-  
-  // addCube button
-  // $('#add-cube-btn').click(function(){
-  //   if($('#box_name').val() != "") {
-  //   addCube();      
-  //   }
-  // });
-
-  // var lockerBoxes = storganize.locker.boxes;
-  // console.log(lockerBoxes);
-
-  // $('#save-locker-btn').click(function(){
-  //   for(var = i; i < lockerBoxes.length; i += 1){
-
-  //     for(var = j; j < cubes.length; j += 1){
-  //       if(lockerBoxes[i].cube_id === cubes[j].id){
-  //         $.ajax({
-  //           url: '/lockers/'+locker_id+'/boxes/' + lockerBoxes[i].id,
-  //           method: 'put',
-  //           data: boxParams,
-  //         })          
-  //       } 
-  //     }
-  //   }
-  // });
-
+  };
 
 
   // define render/animation loop
@@ -180,14 +141,6 @@ $(document).ready(function(){
   };
 
   var render = function () {
-
-    // scene.traverse(function(e) {
-    //   if (e instanceof THREE.Mesh) {
-    //     e.rotation.x += 0.02;
-    //     e.rotation.y += 0.02;        
-    //   }
-    // });
-
     renderer.render(scene, camera);
   };
 
@@ -281,64 +234,6 @@ $(document).ready(function(){
   };
 
 
-  // Scene Exporting/Importing
-  // var controls = new function () {
-  //   this.exportScene = function () {
-
-  //     var lockerName = $('#my-canvas').data('locker').name
-  //     var lockerLength = $('#my-canvas').data('locker').length
-  //     var lockerWidth = $('#my-canvas').data('locker').width
-  //     var lockerId = $('#my-canvas').data('locker').id;
-
-  //     var exporter = new THREE.SceneExporter();
-  //     var sceneJson = JSON.stringify(exporter.parse(scene));
-  //     // localStorage.setItem('scene', sceneJson);
-
-  //     var lockerParams = {
-  //       locker: {scene_json: sceneJson}
-  //     };
-
-  //     $.ajax({
-  //       url: '/lockers/'+lockerId,
-  //       method: 'put',
-  //       data: lockerParams,
-  //     });
-  //   }
-
-  //   this.clearScene = function () {
-  //       scene = new THREE.Scene();
-  //   }
-
-  //   this.importScene = function () {
-  //       // var json = (localStorage.getItem('scene'));
-  //       var json = storganize.locker.scene_json;
-        
-  //       var sceneLoader = new THREE.SceneLoader();
-
-  //       sceneLoader.parse(JSON.parse(json), function (e) {
-
-  //           var sceneItems = e.scene.children;
-  //           objects = [];
-            
-  //           for (var i = 0; i < sceneItems.length; i += 1) {
-  //             if(sceneItems[i] instanceof THREE.Mesh) {
-  //               objects.push(sceneItems[i]);
-  //             }
-  //           }
-
-  //           // objects = Object.keys(cubes).map(function(key) { 
-  //           //   return cubes[key];
-  //           // });
-  //           window.objects = objects;
-  //           scene = e.scene;
-  //       }, '.');
-
-  //       initialize();
-  //       animate();
-  //   }
-  // };
-
-
   // Highlight cube when box is clicked in list on page
   $('.well').click(function(){
     for (var i = 0; i < objects.length; i += 1) {      
@@ -347,16 +242,6 @@ $(document).ready(function(){
       }
     }
   });
-
-
-  // GUI
-  // var gui = new dat.GUI({ autoPlace: false });
-  // gui.add(controls, "exportScene");
-  // gui.add(controls, "clearScene");
-  // gui.add(controls, "importScene");
-
-  // var guiContainer = document.getElementById('gui-container');
-  // guiContainer.appendChild(gui.domElement);
 
   
   initialize();
