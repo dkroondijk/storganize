@@ -9,7 +9,8 @@ $(document).ready(function(){
       objects = [],
       cubes = [],
       SELECTED,
-      NTERSECTED;
+      NTERSECTED,
+      box_id;
 
   // Define scene and camera
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
@@ -107,7 +108,7 @@ $(document).ready(function(){
 
     var locker_id = $('#my-canvas').data('locker').id;
     $.post('/lockers/'+locker_id+'/boxes/', formData, function(){
-      $.get('/lockers/'+locker_id);
+      // $.get('/lockers/'+locker_id);
     });
 
   });
@@ -198,8 +199,7 @@ $(document).ready(function(){
       intersect.object.material.color.setHex(0xff0000);
 
       SELECTED = intersect.object;
-      console.log(SELECTED);
-
+      
       // myCanvas.style.cursor = 'move';
     }
 
@@ -207,7 +207,25 @@ $(document).ready(function(){
       if($(this).data('box').name === SELECTED.name) {
         $(this).children('.box-items').slideToggle();
       }
-    }); 
+    });
+
+    var locker_id = storganize.locker.id;
+
+    $.ajax({
+      url: '/lockers/' + locker_id + '/boxes',
+      method: 'get',
+      dataType: 'json',
+      error: function(){
+        alert("Could not load locker boxes.")
+      },
+      success: function(data){
+        for (var i = 0; i < data.length; i += 1) {
+          if (data[i].name === SELECTED.name) {
+            box_id = data[i].id;
+          }
+        }        
+      }
+    });
 
     render();
   };
@@ -216,8 +234,7 @@ $(document).ready(function(){
     event.preventDefault();
 
     SELECTED.material.color.setHex(0xdeae66);
-    // console.log(SELECTED);
-
+    console.log(SELECTED.name);
 
     var data = {};
     data["box"] = {};
@@ -225,27 +242,22 @@ $(document).ready(function(){
     data["box"]["y"] = SELECTED.position.y;
     data["box"]["z"] = SELECTED.position.z;
 
-    // console.log(SELECTED);
-
     var lockerBoxes = storganize.locker.boxes;
-    // console.log(lockerBoxes);
     var locker_id = storganize.locker.id;
 
-    for (var i = 0; i < lockerBoxes.length; i += 1) {
-      if (lockerBoxes[i].name === SELECTED.name){
-        var id = lockerBoxes[i].id;
-      }
-    };
-
     $.ajax({
-      url: '/lockers/'+locker_id+'/boxes/' + id,
+      url: '/lockers/' + locker_id + '/boxes/' + box_id,
       method: 'patch',
       dataType: 'json',
       data: data,
+      error: function(){
+        alert("Could not update box");
+        SELECTED = null;
+      },
+      success: function(){            
+        SELECTED = null;
+      }
     });
-
-    SELECTED = null;
-
   };
 
 
