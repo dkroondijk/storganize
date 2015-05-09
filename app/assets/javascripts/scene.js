@@ -192,6 +192,8 @@ $(document).ready(function(){
 
     for (var i = 0; i < cubes.length; i += 1) {   
       cubes[i].material.color.setHex(0xdeae66);
+      cubes[i].material.transparent = false;
+      cubes[i].material.opacity = 1;
     }
 
     if (intersects.length > 0 && intersect.object != plane) {
@@ -234,7 +236,7 @@ $(document).ready(function(){
     event.preventDefault();
 
     SELECTED.material.color.setHex(0xdeae66);
-    console.log(SELECTED.name);
+    console.log(SELECTED);
 
     var data = {};
     data["box"] = {};
@@ -265,15 +267,19 @@ $(document).ready(function(){
   $('li').click(function(){
     for (var i = 0; i < cubes.length; i += 1) {   
       cubes[i].material.color.setHex(0xdeae66);
+      cubes[i].material.transparent = false;
+      cubes[i].material.opacity = 1;
 
       if(cubes[i].name === $(this).data('box').name) {
         cubes[i].material.color.setHex(0xff0000);
+      } else {
+        cubes[i].material.transparent = true;
+        cubes[i].material.opacity = 0.3;        
       }
     }
   });
 
   $('.box-items').hide();
-
   
   initialize();
 
