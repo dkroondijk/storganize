@@ -15,7 +15,7 @@ class BoxesController < ApplicationController
     respond_to do |format|
       if @box.save
         format.html { redirect_to locker_path(@locker), notice: "Box Added" }
-        format.json { render @box }
+        format.json { render json: {} }
       else
         # render "/lockers/#{@locker.id}"
         
@@ -31,10 +31,15 @@ class BoxesController < ApplicationController
 
   def update
     @box = Box.find(params[:id])
-    if @box.update(box_params)
-      render "/lockers/show"
-    else
-      render "/lockers/show"
+
+    respond_to do |format|
+      if @box.update(box_params)
+        format.html { render "/lockers/show" }
+        format.json { render json: {} }
+      else
+        format.html { render "/lockers/show" }
+        format.json { render json: {} }
+      end
     end
   end
 

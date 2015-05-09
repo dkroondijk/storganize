@@ -202,7 +202,8 @@ $(document).ready(function(){
 
       // myCanvas.style.cursor = 'move';
     }
-    $('li').each(function(index){
+
+    $('li.box').each(function(index){
       if($(this).data('box').name === SELECTED.name) {
         $(this).children('.box-items').slideToggle();
       }
@@ -238,7 +239,8 @@ $(document).ready(function(){
 
     $.ajax({
       url: '/lockers/'+locker_id+'/boxes/' + id,
-      method: 'put',
+      method: 'patch',
+      dataType: 'json',
       data: data,
     });
 
