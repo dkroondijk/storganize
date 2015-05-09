@@ -58,5 +58,6 @@ group :development, :test do
   gem 'hirb'
   gem 'awesome_print'
   gem 'interactive_editor'
+  gem 'quiet_assets'
 end
 

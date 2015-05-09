@@ -94,17 +94,19 @@ $(document).ready(function(){
 
     var cube = newCube($("#box_name").val(), 25, 25, 25);
     addCube(cube);
-    // addCube(newCube(1, 25, 25, 25));
-
+    
     var data = {};
     data["box"] = {};
     data["box"]["x"] = cube.position.x;
     data["box"]["y"] = cube.position.y;
     data["box"]["z"] = cube.position.z;
-    data["box"]["name"] = cube.name;
+    // data["box"]["name"] = cube.name;
+
+    var formData = $(this).serialize() + '&' + $.param(data);
+    // console.log(formData);
 
     var locker_id = $('#my-canvas').data('locker').id;
-    $.post('/lockers/'+locker_id+'/boxes/', data, function(){
+    $.post('/lockers/'+locker_id+'/boxes/', formData, function(){
       $.get('/lockers/'+locker_id);
     });
 
@@ -118,7 +120,6 @@ $(document).ready(function(){
     cube.position.x = x;
     cube.position.y = y;
     cube.position.z = z;
-    // cube.name = $("#box_name").val();
     cube.name = name;
     cube.unique_id = "blah";
 
@@ -188,12 +189,17 @@ $(document).ready(function(){
     var intersects = raycaster.intersectObjects(objects);
     var intersect = intersects[0];
 
+    for (var i = 0; i < cubes.length; i += 1) {   
+      cubes[i].material.color.setHex(0xdeae66);
+    }
+
     if (intersects.length > 0 && intersect.object != plane) {
       
       intersect.object.material.color.setHex(0xff0000);
 
       SELECTED = intersect.object;
-      // console.log(SELECTED);
+      console.log(SELECTED);
+
       // myCanvas.style.cursor = 'move';
     }
 
@@ -212,9 +218,10 @@ $(document).ready(function(){
     data["box"]["y"] = SELECTED.position.y;
     data["box"]["z"] = SELECTED.position.z;
 
-    console.log(SELECTED);
+    // console.log(SELECTED);
 
     var lockerBoxes = storganize.locker.boxes;
+    // console.log(lockerBoxes);
     var locker_id = storganize.locker.id;
 
     for (var i = 0; i < lockerBoxes.length; i += 1) {
@@ -235,10 +242,13 @@ $(document).ready(function(){
 
 
   // Highlight cube when box is clicked in list on page
-  $('.well').click(function(){
-    for (var i = 0; i < objects.length; i += 1) {      
-      if(objects[i].id === $(this).data('box').cube_id) {
-        objects[i].material.color.setHex(0xff0000);
+  $('li').click(function(){
+    for (var i = 0; i < cubes.length; i += 1) {   
+      cubes[i].material.color.setHex(0xdeae66);
+
+
+      if(cubes[i].name === $(this).data('box').name) {
+        cubes[i].material.color.setHex(0xff0000);
       }
     }
   });
