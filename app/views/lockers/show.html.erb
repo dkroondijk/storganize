@@ -20,6 +20,11 @@
         <li class="list-group-item" id="<%= dom_id(box) %>" data-box="<%= box.to_json %>">
           <%= link_to box.name, "javascript:void(0)" %>
           <span class="badge"><%= box.items.count %></span>
+          <ul class="list-group box-items">
+            <% box.items.each do |item| %>
+            <li class="list-group-item"><%= item.name %></li>
+            <% end %>
+          </ul>
         </li>
       <% end %>      
     </ul>

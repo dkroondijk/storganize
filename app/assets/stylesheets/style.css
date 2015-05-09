@@ -3,6 +3,11 @@
   background: #ccc;
 }
 
+.logo {
+  display: inline-block;
+  border-radius: 5px;
+}
+
 .nav-button {
   float: right;
   padding: 15px;

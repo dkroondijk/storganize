@@ -202,6 +202,11 @@ $(document).ready(function(){
 
       // myCanvas.style.cursor = 'move';
     }
+    $('li').each(function(index){
+      if($(this).data('box').name === SELECTED.name) {
+        $(this).children('.box-items').slideToggle();
+      }
+    }); 
 
     render();
   };
@@ -211,6 +216,7 @@ $(document).ready(function(){
 
     SELECTED.material.color.setHex(0xdeae66);
     // console.log(SELECTED);
+
 
     var data = {};
     data["box"] = {};
@@ -228,7 +234,7 @@ $(document).ready(function(){
       if (lockerBoxes[i].name === SELECTED.name){
         var id = lockerBoxes[i].id;
       }
-    }
+    };
 
     $.ajax({
       url: '/lockers/'+locker_id+'/boxes/' + id,
@@ -246,12 +252,13 @@ $(document).ready(function(){
     for (var i = 0; i < cubes.length; i += 1) {   
       cubes[i].material.color.setHex(0xdeae66);
 
-
       if(cubes[i].name === $(this).data('box').name) {
         cubes[i].material.color.setHex(0xff0000);
       }
     }
   });
+
+  $('.box-items').hide();
 
   
   initialize();
