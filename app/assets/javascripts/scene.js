@@ -9,7 +9,6 @@ $(document).ready(function(){
       objects = [],
       cubes = [],
       SELECTED,
-      NTERSECTED,
       box_id;
 
   // Define scene and camera
@@ -108,10 +107,8 @@ $(document).ready(function(){
     var locker_id = $('#my-canvas').data('locker').id;
 
     var deparam = function (querystring) {
-      // remove any preceding url and split
       querystring = querystring.substring(querystring.indexOf('?')+1).split('&');
       var params = {}, pair, d = decodeURIComponent, i;
-      // march and parse
       for (i = querystring.length; i > 0;) {
         pair = querystring[--i].split('=');
         params[d(pair[0])] = d(pair[1]);
@@ -129,8 +126,9 @@ $(document).ready(function(){
       error: function(){
         alert("Could not add box!");
       },
-      success: function(){
-        $('.box-list').append(boxData);
+      success: function(response){
+        console.log(response);
+        // $('.box-list').append(boxData);
       }
     });
 
@@ -302,9 +300,19 @@ $(document).ready(function(){
 
   $('.box-delete-btn').on('click', function(){
     var boxId = $(this).parents('.box').data('box').id;
+    var boxName = $(this).parents('.box').data('box').name;
+    console.log(boxName);
+
     deleteBox(boxId, this, function(box){
       $(box).parents('.box').slideUp();
     });
+
+    for (var i = 0; i < cubes.length; i += 1) {
+      if(cubes[i].name === boxName) {
+        scene.remove(cubes[i]);
+      }
+    render();
+    }
   });
 
 

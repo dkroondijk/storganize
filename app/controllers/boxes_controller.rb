@@ -15,7 +15,7 @@ class BoxesController < ApplicationController
     respond_to do |format|
       if @box.save
         format.html { redirect_to locker_path(@locker), notice: "Box Added" }
-        format.json { render json: {} }
+        format.json { render json: @box }
       else      
         format.html { render "lockers/show" }
         format.js { render }
