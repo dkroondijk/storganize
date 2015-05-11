@@ -46,10 +46,10 @@ class BoxesController < ApplicationController
     @locker = Locker.find(params[:locker_id])
     @box = Box.find(params[:id])
 
+    @box.destroy
     respond_to do |format|
-      @box.destroy
       format.html { redirect_to locker_path(@locker) }
-      format.json { render json: {} }   
+      format.json { head :no_content }   
     end
   end
 

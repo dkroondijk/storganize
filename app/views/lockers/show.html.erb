@@ -13,6 +13,7 @@
   </div>
 
   <div class="col-md-3">
+    <h3>Box List</h3>
     <ul class="list-group box-list">
       <% @locker.boxes.each do |box| %>
        <%= render partial: "boxes/box_list", locals: {box: box} %>

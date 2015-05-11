@@ -292,6 +292,7 @@ $(document).ready(function(){
     $.ajax({
       url: '/lockers/' + locker_id + '/boxes/' + id,
       method: 'delete',
+      dataType: 'json',
       error: function(){
         alert("Can't delete box");
       },
@@ -302,7 +303,7 @@ $(document).ready(function(){
   $('.box-delete-btn').click(function(){
     var boxId = $(this).parents('.box').data('box').id;
     deleteBox(boxId, function(){
-      $(this).parents('.box').slideUp('slow');
+      $(this).parents('.box').slideUp();
     });
   });
 
