@@ -127,8 +127,8 @@ $(document).ready(function(){
         alert("Could not add box!");
       },
       success: function(response){
-        console.log(response);
-        // $('.box-list').append(boxData);
+        console.log(response.name);
+        $('.box-list').append(response);
       }
     });
 
@@ -143,7 +143,7 @@ $(document).ready(function(){
     cube.position.y = y;
     cube.position.z = z;
     cube.name = name;
-    cube.unique_id = "blah";
+    // cube.unique_id = "blah";
 
     return cube;
   }
@@ -330,6 +330,10 @@ $(document).ready(function(){
         cubes[i].material.opacity = 0.3;        
       }
     }
+  });
+
+  $('.box').on("click", '#add-item-btn', function(){
+    $('.badge a').html(parseInt($(this).parents('.box').data('items').length+1))
   });
 
   $('.box-items').hide();

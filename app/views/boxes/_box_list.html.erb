@@ -1,4 +1,4 @@
-<li class="list-group-item box" id="<%= dom_id(box) %>" data-box="<%= box.to_json %>">
+<li class="list-group-item box" id="<%= dom_id(box) %>" data-box="<%= box.to_json %>" data-items="<%= box.items.to_json %>">
   <%= link_to "javascript:void(0)" do %>
     <%= best_in_place [@locker, box], :name, 
                                       as: :input, 
