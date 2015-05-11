@@ -36,8 +36,11 @@ canvas {
   float: left;
 }
 
-/*#gui-container {
+a:hover {
+  text-decoration: none;
+}
+
+.box-list-buttons {
   display: inline-block;
-  position: absolute;
-  top: 0;
-}*/
+  margin-left: 10px;
+}

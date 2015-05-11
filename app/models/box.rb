@@ -3,7 +3,7 @@ class Box < ActiveRecord::Base
   has_many :items, dependent: :destroy
   accepts_nested_attributes_for :items, reject_if: lambda {|x| x[:name].blank? }, allow_destroy: true
 
-  validates :name, presence: :true
+  validates :name, presence: true
 
   # before_create :set_cube_id
 

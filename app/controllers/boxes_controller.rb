@@ -15,26 +15,21 @@ class BoxesController < ApplicationController
     respond_to do |format|
       if @box.save
         format.html { redirect_to locker_path(@locker), notice: "Box Added" }
-        format.json { render @box }
-      else
-        # render "/lockers/#{@locker.id}"
-        
-        format.html { 
-          render "lockers/show"
-          flash[:alert] = "Can't add box!"
-        }
+        format.json { render json: {} }
+      else      
+        format.html { render "lockers/show" }
         format.js { render }
       end   
     end
-    
   end
 
   def update
+    @locker = Locker.find(params[:locker_id])
     @box = Box.find(params[:id])
 
     respond_to do |format|
       if @box.update(box_params)
-        format.html { render "/lockers/show" }
+        format.html { redirect_to locker_path(@locker), notice: "Box Updated" }
         format.json { render json: {} }
       else
         format.html { render "/lockers/show" }
@@ -45,6 +40,17 @@ class BoxesController < ApplicationController
 
   def show
     
+  end
+
+  def destroy
+    @locker = Locker.find(params[:locker_id])
+    @box = Box.find(params[:id])
+
+    respond_to do |format|
+      @box.destroy
+      format.html { redirect_to locker_path(@locker) }
+      format.json { render json: {} }   
+    end
   end
 
 

@@ -7,25 +7,16 @@
 <div>
 
   <div id="my-canvas" data-locker="<%= @locker.to_json %>">
-    <div id="gui-container"></div>
   </div>
 
   <div class="box-form col-md-3">
     <%= render "boxes/form" %>
   </div>
 
-  <div class="box-list col-md-3">
-    <ul class="list-group">
+  <div class="col-md-3">
+    <ul class="list-group box-list">
       <% @locker.boxes.each do |box| %>
-        <li class="list-group-item box" id="<%= dom_id(box) %>" data-box="<%= box.to_json %>">
-          <%= link_to box.name, "javascript:void(0)" %>
-          <span class="badge"><%= box.items.count %></span>
-          <ul class="list-group box-items">
-            <% box.items.each do |item| %>
-            <li class="list-group-item"><%= item.name %></li>
-            <% end %>
-          </ul>
-        </li>
+       <%= render partial: "boxes/box_list", locals: {box: box} %>
       <% end %>      
     </ul>
   </div>

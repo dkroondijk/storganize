@@ -1,0 +1,20 @@
+<li class="list-group-item box" id="<%= dom_id(box) %>" data-box="<%= box.to_json %>">
+  <%= link_to "javascript:void(0)" do %>
+    <%= best_in_place [@locker, box], :name, 
+                                      as: :input, 
+                                      activator: "#activator-#{box.id}", 
+                                      class: "box-name-link" %>
+  <% end %>
+  <span class="badge"><%= box.items.count %></span>
+  <div class="box-list-buttons">
+    <%= link_to fa_icon("trash-o"), "javascript:void(0)", class: "box-delete-btn" %>
+    <%= link_to fa_icon("pencil-square-o"), "javascript:void(0)", class: "box-edit-btn", id: "activator-#{box.id}" %>    
+  </div>
+  <ul class="list-group box-items">
+    <% box.items.each do |item| %>
+    <li class="list-group-item">
+      <%= best_in_place [@locker, box, item], :name, as: :input %>
+    </li>
+    <% end %>
+  </ul>
+</li>

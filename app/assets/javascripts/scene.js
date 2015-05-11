@@ -90,6 +90,8 @@ $(document).ready(function(){
 
   };
 
+
+  // New box form submit
   $('#new_box').submit(function(event){
     event.preventDefault();
 
@@ -101,14 +103,35 @@ $(document).ready(function(){
     data["box"]["x"] = cube.position.x;
     data["box"]["y"] = cube.position.y;
     data["box"]["z"] = cube.position.z;
-    // data["box"]["name"] = cube.name;
 
     var formData = $(this).serialize() + '&' + $.param(data);
-    // console.log(formData);
-
     var locker_id = $('#my-canvas').data('locker').id;
-    $.post('/lockers/'+locker_id+'/boxes/', formData, function(){
-      // $.get('/lockers/'+locker_id);
+
+    var deparam = function (querystring) {
+      // remove any preceding url and split
+      querystring = querystring.substring(querystring.indexOf('?')+1).split('&');
+      var params = {}, pair, d = decodeURIComponent, i;
+      // march and parse
+      for (i = querystring.length; i > 0;) {
+        pair = querystring[--i].split('=');
+        params[d(pair[0])] = d(pair[1]);
+      }
+      return params;
+    };
+
+    var boxData = deparam(formData);
+
+    $.ajax({
+      url: '/lockers/' + locker_id + '/boxes',
+      method: 'post',
+      dataType: 'json',
+      data: formData,
+      error: function(){
+        alert("Could not add box!");
+      },
+      success: function(){
+        $('.box-list').append(boxData);
+      }
     });
 
   });
@@ -200,8 +223,7 @@ $(document).ready(function(){
       
       intersect.object.material.color.setHex(0xff0000);
 
-      SELECTED = intersect.object;
-      
+      SELECTED = intersect.object;      
       // myCanvas.style.cursor = 'move';
     }
 
@@ -236,7 +258,7 @@ $(document).ready(function(){
     event.preventDefault();
 
     SELECTED.material.color.setHex(0xdeae66);
-    console.log(SELECTED);
+    // console.log(SELECTED);
 
     var data = {};
     data["box"] = {};
@@ -263,14 +285,36 @@ $(document).ready(function(){
   };
 
 
+  var deleteBox = function(id, callback){
+    
+    var locker_id = storganize.locker.id;
+
+    $.ajax({
+      url: '/lockers/' + locker_id + '/boxes/' + id,
+      method: 'delete',
+      error: function(){
+        alert("Can't delete box");
+      },
+      success: callback
+    });
+  }
+
+  $('.box-delete-btn').click(function(){
+    var boxId = $(this).parent().data('box').id;
+    deleteBox(boxId, function(){
+      $(this).parents('.box').slideUp('slow');
+    });
+  });
+
+
   // Highlight cube when box is clicked in list on page
-  $('li').click(function(){
+  $('li.box .box-name-link').click(function(){
     for (var i = 0; i < cubes.length; i += 1) {   
       cubes[i].material.color.setHex(0xdeae66);
       cubes[i].material.transparent = false;
       cubes[i].material.opacity = 1;
 
-      if(cubes[i].name === $(this).data('box').name) {
+      if(cubes[i].name === $(this).parents('.box').data('box').name) {
         cubes[i].material.color.setHex(0xff0000);
       } else {
         cubes[i].material.transparent = true;

@@ -39,6 +39,10 @@ gem 'jquery-turbolinks'
 # nested form attributes
 gem 'cocoon'
 
+gem 'font-awesome-rails'
+
+gem 'best_in_place', '~> 3.0.1'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

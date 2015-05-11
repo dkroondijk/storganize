@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root "lockers#index"
 
   resources :lockers do
-    resources :boxes
+    resources :boxes do
+      resources :items
+    end
   end
 
   resources :sessions, only: [:new, :create] do
