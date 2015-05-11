@@ -297,10 +297,10 @@ $(document).ready(function(){
       },
       success: callback
     });
-  }
+  };
 
   $('.box-delete-btn').click(function(){
-    var boxId = $(this).parent().data('box').id;
+    var boxId = $(this).parents('.box').data('box').id;
     deleteBox(boxId, function(){
       $(this).parents('.box').slideUp('slow');
     });

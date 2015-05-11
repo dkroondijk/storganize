@@ -2,7 +2,7 @@ class LockersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @lockers = Locker.all
+    @lockers = current_user.lockers
 
     @locker = Locker.new
   end
@@ -20,15 +20,22 @@ class LockersController < ApplicationController
   def show
     @locker = Locker.find(params[:id])
     @box = Box.new
+    @item = Item.new
   end
 
   def update
     @locker = Locker.find(params[:id])
-    if @locker.update(locker_params)
-      render "/lockers/show"
-    else
-      render :show
-      flash[:alert] = "Can't save locker"
+    respond_to do |format|
+      if @locker.update(locker_params)
+        format.html { render "/lockers/show" }
+        format.json { respond_with_bip(@locker) }
+      else
+        format.html { 
+          render :show 
+          flash[:alert] = "Can't save locker"
+        }
+        format.json { render json: {} }
+      end
     end
   end
 

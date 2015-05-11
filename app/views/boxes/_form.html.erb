@@ -1,4 +1,4 @@
-<h1><%= @locker.name %></h1>
+<h1><%= best_in_place @locker, :name, as: :input %></h1>
 <p>Length: <%= @locker.length %></p>
 <p>Width: <%= @locker.width %></p>
 <h3>Add box!</h3>

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :lockers do
     resources :boxes do
-      resources :items
+      resources :items, only: [:create, :update]
     end
   end
 

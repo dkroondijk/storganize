@@ -42,5 +42,15 @@ a:hover {
 
 .box-list-buttons {
   display: inline-block;
-  margin-left: 10px;
+  margin-right: 10px;
+  float: right;
+}
+
+.badge a {
+  color: white;
+  text-decoration: none;
+}
+
+.add-item-form {
+  margin-top: 10px;
 }
