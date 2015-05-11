@@ -11,11 +11,13 @@
     <%= link_to fa_icon("trash-o"), "javascript:void(0)", class: "box-delete-btn" %>
   </div>
   <ul class="list-group box-items">
+    <h4>Box Contents:</h4>
     <% box.items.each do |item| %>
       <%= render partial: "items/item_list", locals: {box: box, item: item} %>
     <% end %>
-    <div class="add-item-form">
-      <%= render partial: "items/form", locals: {box: box} %>
-    </div>
   </ul>
+  <div class="add-item-btn"><%= link_to fa_icon("plus"), "javascript:void(0)" %></div>
+  <div class="add-item-form">
+    <%= render partial: "items/form", locals: {box: box} %>
+  </div>
 </li>

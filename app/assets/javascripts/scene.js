@@ -285,7 +285,7 @@ $(document).ready(function(){
   };
 
 
-  var deleteBox = function(id, callback){
+  var deleteBox = function(id, box, callback){
     
     var locker_id = storganize.locker.id;
 
@@ -296,14 +296,14 @@ $(document).ready(function(){
       error: function(){
         alert("Can't delete box");
       },
-      success: callback
+      success: callback(box)
     });
   };
 
-  $('.box-delete-btn').click(function(){
+  $('.box-delete-btn').on('click', function(){
     var boxId = $(this).parents('.box').data('box').id;
-    deleteBox(boxId, function(){
-      $(this).parents('.box').slideUp();
+    deleteBox(boxId, this, function(box){
+      $(box).parents('.box').slideUp();
     });
   });
 

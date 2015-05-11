@@ -1,4 +1,5 @@
-<%= simple_form_for @item, url: locker_box_items_path(@locker, box, @item), remote: true do |f| %>
+<% the_box = defined?(box) ? box : @box %>
+<%= simple_form_for @item, url: locker_box_items_path(@locker, the_box, @item), remote: true do |f| %>
   <%= f.input :name, label: false %>
   <%= f.submit "Add Item" %>
 <% end %>

@@ -54,3 +54,8 @@ a:hover {
 .add-item-form {
   margin-top: 10px;
 }
+
+.add-item-btn {
+  /*display: inline-block;*/
+  /*float: right;*/
+}
