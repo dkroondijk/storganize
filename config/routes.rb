@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   
-  root "lockers#index"
+  root "welcome#index"
 
   resources :lockers do
     resources :boxes do
-      resources :items, only: [:create, :update]
+      resources :items, only: [:create, :update, :destroy]
     end
   end
 

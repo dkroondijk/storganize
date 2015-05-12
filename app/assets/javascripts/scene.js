@@ -308,7 +308,6 @@ $(document).ready(function(){
   $(document).on('click', '.box-delete-btn', function(){
     var boxId = $(this).parents('.box').data('box').id;
     var boxName = $(this).parents('.box').data('box').name;
-    console.log(boxName);
 
     deleteBox(boxId, this, function(box){
       $(box).parents('.box').slideUp();
@@ -320,6 +319,32 @@ $(document).ready(function(){
       }
     render();
     }
+  });
+
+
+  var deleteItem = function(boxId, itemId, item, callback){
+    
+    var locker_id = storganize.locker.id;
+
+    $.ajax({
+      url: '/lockers/' + locker_id + '/boxes/' + boxId + '/items/' + itemId,
+      method: 'delete',
+      dataType: 'json',
+      error: function(){
+        alert("Can't delete item");
+      },
+      success: callback(item)
+    });
+  };
+
+  $(document).on('click', '.item-delete-btn', function(){
+    var boxId = $(this).parents('.box').data('box').id;
+    var itemId = $(this).parents('.item').data('item').id;
+
+    deleteItem(boxId, itemId, this, function(item){
+      $(item).parents('.item').slideUp();
+    });
+
   });
 
 
@@ -340,8 +365,15 @@ $(document).ready(function(){
   });
 
   $(document).on("click", '#add-item-btn', function(){
-    $(this).parents('.box').children('.badge').children('a').html(parseInt($(this).parents('.box').data('items').length+1))
+    $(this).parents('.box').children('.badge').children('a').html(parseInt($(this).parents('.box').data('items').length+1));
   });
+
+
+  $(document).on('click', '.item-delete-btn', function(){
+    $(this).parents('.box').children('.badge').children('a').html(parseInt($(this).parents('.box').data('items').length-1));
+  });
+    
+
 
   $('.box-items').hide();
   

@@ -1,3 +1,6 @@
-<li class="list-group-item">
+<li class="list-group-item item" data-item="<%= item.to_json %>">
   <%= best_in_place [@locker, box, item], :name, as: :input %>
+  <div class="box-list-buttons">
+    <%= link_to fa_icon("trash-o"), "javascript:void(0)", class: "item-delete-btn" %>
+  </div>
 </li>
