@@ -17,4 +17,7 @@
 //= require best_in_place
 //= require three
 //= require cocoon
+//= require bootstrap
 //= require_tree .
+
+

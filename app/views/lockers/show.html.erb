@@ -8,22 +8,32 @@
 
   <div id="my-canvas" data-locker="<%= @locker.to_json %>"></div>
 
-  <div id="box-filter">
-    Box Filter:<input id="search-field" />
+  <div class="box-wrapper">
+    <div class="box-form col-md-6">
+      <h1><%= best_in_place @locker, :name, as: :input %></h1>
+      <p>Length: <%= @locker.length %></p>
+      <p>Width: <%= @locker.width %></p>
+      <h3>Add Box</h3>
+
+      <%= render "boxes/form" %>
+    </div>
+
+    <div class="col-md-6 right-panel">
+      <div id="box-filter">
+        <span class="fa fa-search"></span><input id="search-field" placeholder="Search Items"/>
+      </div>
+      <br>
+      <div>
+        <h3>Box List</h3>
+        <ul class="list-group box-list">
+          <% @locker.boxes.each do |box| %>
+           <%= render partial: "boxes/box_list", locals: {box: box} %>
+          <% end %>      
+        </ul>
+      </div>    
+    </div>    
   </div>
 
-  <div class="box-form col-md-3">
-    <%= render "boxes/form" %>
-  </div>
-
-  <div class="col-md-3">
-    <h3>Box List</h3>
-    <ul class="list-group box-list">
-      <% @locker.boxes.each do |box| %>
-       <%= render partial: "boxes/box_list", locals: {box: box} %>
-      <% end %>      
-    </ul>
-  </div>
   
 </div>
 

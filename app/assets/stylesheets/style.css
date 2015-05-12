@@ -13,12 +13,6 @@
   padding: 15px;
 }
 
-.locker-list {
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 20px;
-}
-
 canvas {
   width: 500px;
 }
@@ -32,12 +26,65 @@ canvas {
   float: left;
 }
 
+.box-wrapper {
+  display: inline-block;
+  width: 640px;
+}
+
+.right-panel {
+  float: right;
+}
+
+.locker-list {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+}
+
 .box-form {
   float: left;
 }
 
+.new_box {
+  max-height: 300px;
+  overflow-y: scroll; 
+}
+
+#add-box-btn {
+  display: inline-block;
+}
+
+.nested-fields {
+  position: relative;
+}
+
+.item-input-field {
+  display: inline-block;
+  width: 85%;
+}
+
+.remove-item-form-btn {
+  display: inline-block;
+  position: absolute;
+  padding-left: 10px;
+  top: 5px;
+}
+
+.remove-item-form-btn a {
+  color: red;
+}
+
+.links {
+  display: inline-block;
+}
+
 a:hover {
   text-decoration: none;
+}
+
+.box-list {
+  height: 430px;
+  overflow-y: scroll;
 }
 
 .box-list-buttons {
@@ -68,4 +115,12 @@ a:hover {
 #box-filter {
   display: inline-block;
   float: right;
+  border: 1px solid #ccc;
+  padding: 5px 10px 5px 10px;
+  border-radius: 17px;
+}
+
+#search-field {
+  border: none;
+  margin-left: 10px;
 }

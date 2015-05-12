@@ -94,7 +94,13 @@ $(document).ready(function(){
   $('#new_box').submit(function(event){
     event.preventDefault();
 
-    var cube = newCube($("#box_name").val(), 25, 25, 25);
+    var lockerLength = $('#my-canvas').data('locker').length
+    var lockerWidth = $('#my-canvas').data('locker').width
+
+    var gridLength = lockerLength * 25 + 25;
+    var gridWidth = lockerWidth * 25 + 25;
+
+    var cube = newCube($("#box_name").val(), gridWidth, 25, gridLength);
     addCube(cube);
     
     var data = {};
@@ -221,7 +227,8 @@ $(document).ready(function(){
       
       intersect.object.material.color.setHex(0xff0000);
 
-      SELECTED = intersect.object;      
+      SELECTED = intersect.object;
+      console.log(SELECTED);      
       // myCanvas.style.cursor = 'move';
     }
 
@@ -365,12 +372,42 @@ $(document).ready(function(){
   });
 
   $(document).on("click", '#add-item-btn', function(){
-    $(this).parents('.box').children('.badge').children('a').html(parseInt($(this).parents('.box').data('items').length+1));
+    var itemCount = $(this).parents('.box').children('.badge').children('a');
+    
+    var locker_id = storganize.locker.id;
+    var boxId = $(this).parents('.box').data('box').id;
+
+    $.ajax({
+      url: '/lockers/' + locker_id + '/boxes/' + boxId + '/items/',
+      method: 'get',
+      dataType: 'json',
+      error: function(){
+        alert('Could not access box items.')
+      },
+      success: function(response){
+        itemCount.html(response.length);
+      }
+    })
   });
 
 
   $(document).on('click', '.item-delete-btn', function(){
-    $(this).parents('.box').children('.badge').children('a').html(parseInt($(this).parents('.box').data('items').length-1));
+    var itemCount = $(this).parents('.box').children('.badge').children('a');
+
+    var locker_id = storganize.locker.id;
+    var boxId = $(this).parents('.box').data('box').id;
+
+    $.ajax({
+      url: '/lockers/' + locker_id + '/boxes/' + boxId + '/items/',
+      method: 'get',
+      dataType: 'json',
+      error: function(){
+        alert('Could not access box items.')
+      },
+      success: function(response){
+        itemCount.html(response.length);
+      }
+    })
   });
     
 

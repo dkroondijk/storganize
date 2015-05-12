@@ -1,5 +1,12 @@
 class ItemsController < ApplicationController
 
+  def index
+    @locker = Locker.find(params[:locker_id])
+    @box = Box.find(params[:box_id])
+    @items = @box.items
+    render json: @items
+  end
+
   def create
     @locker = Locker.find(params[:locker_id])
     @box = Box.find(params[:box_id])

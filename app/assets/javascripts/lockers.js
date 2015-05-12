@@ -20,4 +20,8 @@ $(document).ready(function() {
     $(this).change();
   });
 
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+
 });

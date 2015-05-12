@@ -1,4 +1,10 @@
 <div class="nested-fields">
-  <%= f.input :name %>
-  <%= link_to_remove_association "Remove Item", f, class: "btn btn-danger" %>
+  <div>
+    <div class="item-input-field" data-toggle="tooltip" title="Remove Item" data-placement="top">
+      <%= f.input :name, label: false, placeholder: "Item Name" %>
+    </div>
+    <div class="remove-item-form-btn">
+    <%= link_to_remove_association fa_icon("minus-square-o 2x"), f %>      
+    </div>  
+  </div>
 </div>

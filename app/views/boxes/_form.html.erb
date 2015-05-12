@@ -1,21 +1,16 @@
-<h1><%= best_in_place @locker, :name, as: :input %></h1>
-<p>Length: <%= @locker.length %></p>
-<p>Width: <%= @locker.width %></p>
-<h3>Add box!</h3>
-
 <%= simple_form_for @box, url: locker_boxes_path(@locker) do |f| %>
-  <%= f.input :name %>
+  <%= f.input :name, label: false, placeholder: "Box Name" %>
   <%= f.input :cube_id, as: :hidden %>
-  <h4>Add Item</h4>
+  <h4 class="box-item-title">Box Items</h4>
   <div id="box-items">
     <%= f.full_error :items %>
     <%= f.simple_fields_for :items do |i| %>
       <%= render "boxes/item_fields", f: i %>
     <% end %>
   </div>
-  <div class="links">
-    <%= link_to_add_association "add item", f, :items, partial: "boxes/item_fields", class: "btn btn-info" %>
+  <div class="links" data-toggle="tooltip" title="Add Item" data-placement="right">
+    <%= link_to_add_association fa_icon("plus-square-o 2x"), f, :items, partial: "boxes/item_fields", class: "add-item-form-btn" %>
   </div>
   <br>
-  <%= f.submit "Add Box To Locker", id: "add-cube-btn" %>
+  <%= f.submit "Add Box To Locker", id: "add-cube-btn", class: "btn btn-success" %>
 <% end %>
