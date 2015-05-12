@@ -11,4 +11,14 @@ $(document).ready(function() {
   $('.box-list').on('click', '.badge', function(){
     $(this).siblings('.box-items').slideToggle();
   });
+
+  $('#search-field').change(function(){
+    var filter = $('#search-field').val();
+    $("li.box ul li span:not(:contains('"+filter+"'))").parents('.box').hide();
+    $("li.box ul li span:contains('"+filter+"')").parents('.box').show();
+  }).keyup(function() {
+    $(this).change();
+  });
+
+
 });

@@ -8,6 +8,10 @@
 
   <div id="my-canvas" data-locker="<%= @locker.to_json %>"></div>
 
+  <div id="box-filter">
+    Box Filter:<input id="search-field" />
+  </div>
+
   <div class="box-form col-md-3">
     <%= render "boxes/form" %>
   </div>
