@@ -119,18 +119,18 @@ $(document).ready(function(){
     var boxData = deparam(formData);
 
     $.ajax({
-      url: '/lockers/' + locker_id + '/boxes',
+      url: '/lockers/' + locker_id + '/boxes.html',
       method: 'post',
-      dataType: 'json',
       data: formData,
       error: function(){
         alert("Could not add box!");
       },
       success: function(response){
-        console.log(response.name);
         $('.box-list').append(response);
+        $('input[type=text]').val('');
       }
     });
+
 
   });
 
@@ -225,35 +225,42 @@ $(document).ready(function(){
       // myCanvas.style.cursor = 'move';
     }
 
-    $('li.box').each(function(index){
-      if($(this).data('box').name === SELECTED.name) {
-        $(this).children('.box-items').slideToggle();
-      }
-    });
+    if(SELECTED) {
+      $('li.box').each(function(index){
+        // console.log($(this).data("box"));
+        if($(this).data('box').name === SELECTED.name) {
+          $(this).children('.box-items').slideToggle();
+        }
+      });
 
-    var locker_id = storganize.locker.id;
+      var locker_id = storganize.locker.id;
 
-    $.ajax({
-      url: '/lockers/' + locker_id + '/boxes',
-      method: 'get',
-      dataType: 'json',
-      error: function(){
-        alert("Could not load locker boxes.")
-      },
-      success: function(data){
-        for (var i = 0; i < data.length; i += 1) {
-          if (data[i].name === SELECTED.name) {
-            box_id = data[i].id;
-          }
-        }        
-      }
-    });
+      $.ajax({
+        url: '/lockers/' + locker_id + '/boxes',
+        method: 'get',
+        dataType: 'json',
+        error: function(){
+          alert("Could not load locker boxes.")
+        },
+        success: function(data){
+          for (var i = 0; i < data.length; i += 1) {
+            if (data[i].name === SELECTED.name) {
+              box_id = data[i].id;
+            }
+          }        
+        }
+      });
+    }
 
     render();
+
+    return false;
   };
 
   function onDocumentMouseUp(event) {
     event.preventDefault();
+
+    if(!SELECTED) { return }
 
     SELECTED.material.color.setHex(0xdeae66);
     // console.log(SELECTED);
@@ -298,7 +305,7 @@ $(document).ready(function(){
     });
   };
 
-  $('.box-delete-btn').on('click', function(){
+  $(document).on('click', '.box-delete-btn', function(){
     var boxId = $(this).parents('.box').data('box').id;
     var boxName = $(this).parents('.box').data('box').name;
     console.log(boxName);
@@ -317,7 +324,7 @@ $(document).ready(function(){
 
 
   // Highlight cube when box is clicked in list on page
-  $('li.box .box-name-link').click(function(){
+  $(document).on('click', 'li.box .box-name-link', function(){
     for (var i = 0; i < cubes.length; i += 1) {   
       cubes[i].material.color.setHex(0xdeae66);
       cubes[i].material.transparent = false;
@@ -332,8 +339,8 @@ $(document).ready(function(){
     }
   });
 
-  $('.box').on("click", '#add-item-btn', function(){
-    $('.badge a').html(parseInt($(this).parents('.box').data('items').length+1))
+  $(document).on("click", '#add-item-btn', function(){
+    $(this).parents('.box').children('.badge').children('a').html(parseInt($(this).parents('.box').data('items').length+1))
   });
 
   $('.box-items').hide();

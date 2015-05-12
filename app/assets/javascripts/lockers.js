@@ -4,11 +4,11 @@ $(document).ready(function() {
 
   $('.add-item-form').hide();
 
-  $('.add-item-btn').click(function(){
+  $('.box-list').on('click', '.add-item-btn', function(){
     $(this).siblings('.add-item-form').slideToggle();
   })
 
-  $('.badge').click(function(){
+  $('.box-list').on('click', '.badge', function(){
     $(this).siblings('.box-items').slideToggle();
   });
 });
