@@ -49,6 +49,19 @@ canvas {
   float: right;
 }
 
+.locker-name {
+  display: inline-block;
+  margin-top: 0;
+}
+
+.locker-info {
+  display: none;
+}
+
+#locker-info-btn {
+  color: black;
+}
+
 .locker-list {
   border: 1px solid black;
   border-radius: 10px;
@@ -63,8 +76,12 @@ canvas {
   float: left;
 }
 
+.new-box-header {
+  margin-top: 10px;
+}
+
 .new_box {
-  max-height: 300px;
+  max-height: 320px;
   overflow-y: scroll; 
 }
 
@@ -100,9 +117,19 @@ a:hover {
   text-decoration: none;
 }
 
+.box-list-header {
+  display: inline-block;
+  font-size: 28px;
+}
+
 .box-list {
   height: 430px;
   overflow-y: scroll;
+}
+
+.box-name {
+  display: inline-block;
+  margin-top: 0;
 }
 
 .ui-state-highlight {
@@ -115,6 +142,14 @@ a:hover {
   display: inline-block;
   margin-right: 10px;
   float: right;
+}
+
+.box-edit-btn {
+
+}
+
+.box-delete-btn {
+  margin-left: 5px;
 }
 
 .badge a {
@@ -141,6 +176,7 @@ a:hover {
   float: right;
   border: 1px solid #ccc;
   padding: 5px 10px 5px 10px;
+  margin-top: 8px;
   border-radius: 17px;
 }
 

@@ -10,10 +10,15 @@
 
   <div class="box-wrapper">
     <div class="box-form col-md-6">
-      <h2><%= best_in_place @locker, :name, as: :input, inner_class: "locker-title" %></h2>
-      <p>Length: <%= @locker.length %></p>
-      <p>Width: <%= @locker.width %></p>
-      <h3>Add Box</h3>
+      <h2 class="locker-name"><%= best_in_place @locker, :name, as: :input, inner_class: "locker-title" %></h2>
+      <%= link_to fa_icon("info-circle"), "javascript:void(0)", id: "locker-info-btn" %>
+      <div class="locker-info">
+        <p>Length: <%= @locker.length %></p>
+        <p>Width: <%= @locker.width %></p>
+        <p>Last Updated: <%= @locker.updated_at.strftime("%Y-%b-%d") %></p>
+      </div>        
+
+      <h3 class="new-box-header">New Box:</h3>
 
       <%= render "boxes/form" %>
     </div>
@@ -22,9 +27,8 @@
       <div id="box-filter">
         <span class="fa fa-search"></span><input id="search-field" placeholder="Search Items"/>
       </div>
-      <br>
       <div>
-        <h3>Box List</h3>
+        <h4 class="box-list-header">Box List</h4>
         <ul class="list-group box-list" id="sortable">
           <% @locker.boxes.each do |box| %>
            <%= render partial: "boxes/box_list", locals: {box: box} %>

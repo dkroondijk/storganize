@@ -31,4 +31,8 @@ $(document).ready(function() {
     $( "#sortable" ).disableSelection();
   });
 
+  $('#locker-info-btn').click(function(){
+    $('.locker-info').slideToggle();
+  })
+
 });

@@ -1,11 +1,15 @@
 <li class="list-group-item box" id="<%= dom_id(box) %>" data-box="<%= box.to_json %>" data-items="<%= box.items.to_json %>">
-  <%= link_to "javascript:void(0)" do %>
-    <%= best_in_place [@locker, box], :name, 
-                                      as: :input, 
-                                      activator: "#activator-#{box.id}", 
-                                      class: "box-name-link" %>
-  <% end %>
-  <span class="badge"><%= link_to box.items.count, "javascript:void(0)" %></span>
+  <h5 class="box-name">
+    <%= link_to "javascript:void(0)" do %>
+      <%= best_in_place [@locker, box], :name, 
+                                        as: :input, 
+                                        activator: "#activator-#{box.id}", 
+                                        class: "box-name-link" %>
+    <% end %>
+  </h5>
+  <span class="badge" data-toggle="tooltip" title="Show Items" data-placement="bottom">
+    <%= link_to box.items.count, "javascript:void(0)" %>
+  </span>
   <div class="box-list-buttons">
     <%= link_to fa_icon("pencil-square-o"), "javascript:void(0)", class: "box-edit-btn", id: "activator-#{box.id}" %>    
     <%= link_to fa_icon("trash-o"), "javascript:void(0)", class: "box-delete-btn" %>
@@ -16,7 +20,10 @@
       <%= render partial: "items/item_list", locals: {box: box, item: item} %>
     <% end %>
   </ul>
-  <div class="add-item-btn"><%= link_to fa_icon("plus"), "javascript:void(0)" %></div>
+  <div class="add-item-btn">
+    <%= link_to fa_icon("plus"), "javascript:void(0)" %>
+    Add Item
+  </div>
   <div class="add-item-form">
     <%= render partial: "items/form", locals: {box: box} %>
   </div>
