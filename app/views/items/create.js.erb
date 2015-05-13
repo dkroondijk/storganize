@@ -1,7 +1,8 @@
 <% if @item.errors.any? %>
   $('.add-item-form').html("<%= j render "/items/form" %>")
 <% else %>
-  $('.box-items').append("<%= j render partial: "/items/item_list", locals: {item: @item, box: @box} %>");
+  // $('.box-items').append("<%#= j render partial: "/items/item_list", locals: {item: @item, box: @box} %>");
+  $('#box-items-<%= @item.box.id %>').append("<%= j render partial: "/items/item_list", locals: {item: @item, box: @box} %>");
 
   <% @item = Item.new %>
   $('.add-item-form').html("<%= j render '/items/form' %>")

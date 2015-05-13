@@ -30,6 +30,7 @@
       <div>
         <h4 class="box-list-header">Box List</h4>
         <ul class="list-group box-list" id="sortable">
+          <div class="fadeout"></div>
           <% @locker.boxes.each do |box| %>
            <%= render partial: "boxes/box_list", locals: {box: box} %>
           <% end %>      

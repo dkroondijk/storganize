@@ -297,6 +297,7 @@ $(document).ready(function(){
   };
 
 
+  // deleting box from list and scene
   var deleteBox = function(id, box, callback){
     
     var locker_id = storganize.locker.id;
@@ -329,6 +330,7 @@ $(document).ready(function(){
   });
 
 
+  // deleting item from box
   var deleteItem = function(boxId, itemId, item, callback){
     
     var locker_id = storganize.locker.id;
@@ -350,6 +352,23 @@ $(document).ready(function(){
 
     deleteItem(boxId, itemId, this, function(item){
       $(item).parents('.item').slideUp();
+
+      var itemCount = $(item).parents('.box').children('.badge').children('a');
+      var locker_id = storganize.locker.id;
+
+      $.ajax({
+        url: '/lockers/' + locker_id + '/boxes/' + boxId + '/items/',
+        method: 'get',
+        dataType: 'json',
+        error: function(){
+          alert('Could not access box items.')
+        },
+        success: function(response){
+          itemCount.html(response.length);
+          console.log(response);
+        }
+      })
+
     });
 
   });
@@ -391,24 +410,24 @@ $(document).ready(function(){
   });
 
 
-  $(document).on('click', '.item-delete-btn', function(){
-    var itemCount = $(this).parents('.box').children('.badge').children('a');
+  // $(document).on('click', '.item-delete-btn', function(){
+  //   var itemCount = $(this).parents('.box').children('.badge').children('a');
 
-    var locker_id = storganize.locker.id;
-    var boxId = $(this).parents('.box').data('box').id;
+  //   var locker_id = storganize.locker.id;
+  //   var boxId = $(this).parents('.box').data('box').id;
 
-    $.ajax({
-      url: '/lockers/' + locker_id + '/boxes/' + boxId + '/items/',
-      method: 'get',
-      dataType: 'json',
-      error: function(){
-        alert('Could not access box items.')
-      },
-      success: function(response){
-        itemCount.html(response.length);
-      }
-    })
-  });
+  //   $.ajax({
+  //     url: '/lockers/' + locker_id + '/boxes/' + boxId + '/items/',
+  //     method: 'get',
+  //     dataType: 'json',
+  //     error: function(){
+  //       alert('Could not access box items.')
+  //     },
+  //     success: function(response){
+  //       itemCount.html(response.length);
+  //     }
+  //   })
+  // });
     
 
 

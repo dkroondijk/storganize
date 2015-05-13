@@ -14,7 +14,7 @@
     <%= link_to fa_icon("pencil-square-o"), "javascript:void(0)", class: "box-edit-btn", id: "activator-#{box.id}" %>    
     <%= link_to fa_icon("trash-o"), "javascript:void(0)", class: "box-delete-btn" %>
   </div>
-  <ul class="list-group box-items">
+  <ul class="list-group box-items" id="box-items-<%= box.id %>">
     <h5>Box Contents:</h5>
     <% box.items.each do |item| %>
       <%= render partial: "items/item_list", locals: {box: box, item: item} %>
