@@ -24,4 +24,11 @@ $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
   });
 
+  $(function() {
+    $( "#sortable" ).sortable({
+      placeholder: "ui-state-highlight"
+    });
+    $( "#sortable" ).disableSelection();
+  });
+
 });

@@ -1,16 +1,30 @@
 .nav-bar {
-  height: 50px;
+  position: relative;
+  height: 60px;
   background: #ccc;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px #888888;
 }
 
 .logo {
   display: inline-block;
   border-radius: 5px;
+  margin: 5px 10px 5px 10px;
+}
+
+.logo-title {
+  display: inline-block;
+  position: absolute;
+  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+  top: 18px;
+  left: 80px;
 }
 
 .nav-button {
   float: right;
-  padding: 15px;
+  padding-top: 20px;
+  padding-right: 15px;
 }
 
 canvas {
@@ -24,6 +38,7 @@ canvas {
   height: 500px;
   border: 2px solid black;
   float: left;
+  box-shadow: 0 2px 5px #888888;
 }
 
 .box-wrapper {
@@ -39,6 +54,10 @@ canvas {
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px;
+}
+
+.locker-title {
+  width: 100%;
 }
 
 .box-form {
@@ -87,6 +106,12 @@ a:hover {
   overflow-y: scroll;
 }
 
+.ui-state-highlight {
+  height: 62px;
+  color: #ccc;
+  opacity: 0.3;
+}
+
 .box-list-buttons {
   display: inline-block;
   margin-right: 10px;
@@ -123,4 +148,5 @@ a:hover {
 #search-field {
   border: none;
   margin-left: 10px;
+  outline: none;
 }

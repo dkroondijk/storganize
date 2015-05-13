@@ -10,7 +10,7 @@
 
   <div class="box-wrapper">
     <div class="box-form col-md-6">
-      <h1><%= best_in_place @locker, :name, as: :input %></h1>
+      <h1><%= best_in_place @locker, :name, as: :input, inner_class: "locker-title" %></h1>
       <p>Length: <%= @locker.length %></p>
       <p>Width: <%= @locker.width %></p>
       <h3>Add Box</h3>
@@ -25,7 +25,7 @@
       <br>
       <div>
         <h3>Box List</h3>
-        <ul class="list-group box-list">
+        <ul class="list-group box-list" id="sortable">
           <% @locker.boxes.each do |box| %>
            <%= render partial: "boxes/box_list", locals: {box: box} %>
           <% end %>      

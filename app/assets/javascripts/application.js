@@ -14,6 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery-ui/sortable
 //= require best_in_place
 //= require three
 //= require cocoon

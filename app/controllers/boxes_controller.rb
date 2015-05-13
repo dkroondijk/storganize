@@ -2,7 +2,7 @@ class BoxesController < ApplicationController
 
   def index
     @locker = Locker.find(params[:locker_id])
-    @boxes = @locker.boxes
+    @boxes = @locker.boxes.most_recent
     render json: @boxes
   end
 

@@ -5,9 +5,5 @@ class Box < ActiveRecord::Base
 
   validates :name, presence: true
 
-  # before_create :set_cube_id
-
-  # def set_cube_id
-  #   self.cube_id = self.x.to_s + self.y.to_s + self.z.to_s
-  # end
+  scope :most_recent, lambda { order("updated_at DESC") }
 end
