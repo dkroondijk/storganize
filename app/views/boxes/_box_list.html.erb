@@ -11,7 +11,7 @@
     <%= link_to fa_icon("trash-o"), "javascript:void(0)", class: "box-delete-btn" %>
   </div>
   <ul class="list-group box-items">
-    <h4>Box Contents:</h4>
+    <h5>Box Contents:</h5>
     <% box.items.each do |item| %>
       <%= render partial: "items/item_list", locals: {box: box, item: item} %>
     <% end %>

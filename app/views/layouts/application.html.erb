@@ -5,7 +5,6 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-  <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/paper/bootstrap.min.css" rel="stylesheet">
   <style>
     body { margin: 0; }
@@ -20,8 +19,13 @@
   </div>
   <h2 class="logo-title">Storganize</h2>
   <div class="nav-button">
-    <%= link_to "My Lockers", root_path %> |
-    <%= link_to "Sign Out", sessions_path, method: :delete %>
+    <% if user_signed_in? %>
+      <%= link_to "My Lockers", root_path %> |
+      <%= link_to "Sign Out", sessions_path, method: :delete %>
+    <% else %>
+      <%= link_to "Register", new_user_path %> |
+      <%= link_to "Sign In", new_session_path %>
+    <% end %>
   </div>
 </div>
 

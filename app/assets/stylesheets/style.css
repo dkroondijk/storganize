@@ -15,7 +15,6 @@
 .logo-title {
   display: inline-block;
   position: absolute;
-  /*font-family: 'Press Start 2P', cursive;*/
   margin: 0;
   top: 5px;
   left: 80px;
@@ -149,4 +148,84 @@ a:hover {
   border: none;
   margin-left: 10px;
   outline: none;
+}
+
+img.bg {
+  min-height: 100%;
+  min-width: 1024px;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
+}
+
+.landing-nav {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+
+.top {
+  padding-top: 120px;
+  position: relative;
+  margin-bottom: 150px;
+}
+
+.top img {
+  display: block;
+  z-index: 20;
+  opacity: 1;
+  margin: 0 auto;
+}
+
+.top h3 {
+  color: white;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section {
+  height: 200px;
+  position: relative;
+}
+
+.section img {
+  margin: 25px;
+}
+
+.section h3 {
+  display: inline-block;
+  position: absolute;
+  top: 62px;
+}
+
+.white {
+  background-color: #dddddd;
+  box-shadow: 0 2px 5px #888888;
+}
+
+.box-icon {
+  display: inline-block;
+  font-size: 36px;
+  margin: 10px 25px 10px 25px;
+}
+
+.cubes-icon {
+  display: inline-block;
+  float: right;
+  font-size: 36px;
+  margin: 10px 25px 10px 25px;
+}
+
+h3.bottom {
+  right: 275px;
+}
+
+.start-btn a {
+  display: block;
+  width: 250px;
+  margin: 70px auto;
 }

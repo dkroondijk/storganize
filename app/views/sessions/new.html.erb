@@ -1,11 +1,11 @@
-<h1>Sign In</h1>
+<h2>Sign In</h2>
 
 <%= simple_form_for "", url: sessions_path, method: :post do |f| %>
   <%= f.input :email, class: "form-control" %>
   <%= f.input :password %>
   <%= f.submit "Sign In" %>
 <% end %>
-
+<br>
 <div>
   <%= link_to "Register", new_user_path %>
 </div>
