@@ -1,5 +1,5 @@
 <div class="col-md-3">
-  <h1>My Lockers</h1>
+  <h2>My Lockers</h2>
   <div class="locker-list">
     <ul class="list-group">    
       <% @lockers.each do |locker| %>
@@ -10,7 +10,7 @@
 </div>
 
 <div class="col-md-8 col-md-offset-1">
-  <h1>New Locker</h1>
+  <h2>New Locker</h2>
   <div class="locker-list">
     <%= simple_form_for @locker, url: lockers_path, method: :post do |f| %>
       <%= f.input :name %>

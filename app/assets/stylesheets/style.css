@@ -15,9 +15,9 @@
 .logo-title {
   display: inline-block;
   position: absolute;
-  font-family: 'Press Start 2P', cursive;
+  /*font-family: 'Press Start 2P', cursive;*/
   margin: 0;
-  top: 18px;
+  top: 5px;
   left: 80px;
 }
 
@@ -36,7 +36,7 @@ canvas {
   position: relative;
   width: 500px;
   height: 500px;
-  border: 2px solid black;
+  /*border: 1px solid #ccc;*/
   float: left;
   box-shadow: 0 2px 5px #888888;
 }
