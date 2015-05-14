@@ -39,6 +39,12 @@ class LockersController < ApplicationController
     end
   end
 
+  def destroy
+    @locker = Locker.find(params[:id])
+    @locker.destroy
+    redirect_to lockers_path
+  end
+
 
   private
 

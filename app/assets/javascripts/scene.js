@@ -340,7 +340,7 @@ $(document).ready(function(){
       method: 'delete',
       dataType: 'json',
       error: function(){
-        alert("Can't delete item");
+        // alert("Can't delete item");
       },
       success: callback(item)
     });

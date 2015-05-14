@@ -22,8 +22,13 @@
 
 .nav-button {
   float: right;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-right: 15px;
+  font-size: 20px;
+}
+
+.nav-button a:hover {
+  text-decoration: none;
 }
 
 canvas {
@@ -35,9 +40,16 @@ canvas {
   position: relative;
   width: 500px;
   height: 500px;
-  /*border: 1px solid #ccc;*/
   float: left;
   box-shadow: 0 2px 5px #888888;
+}
+
+#scene-help-btn {
+  position: absolute;
+  margin-left: 10px;
+  font-size: 18px;
+  color: black;
+  outline: none;
 }
 
 .box-wrapper {
@@ -58,8 +70,22 @@ canvas {
   display: none;
 }
 
+.locker-info p {
+  margin-bottom: 5px;
+}
+
 #locker-info-btn {
   color: black;
+}
+
+.locker-delete-btn {
+  color: red;
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.locker-delete-btn:hover {
+  color: #cc0000;
 }
 
 .locker-list {
@@ -132,6 +158,10 @@ a:hover {
   margin-top: 0;
 }
 
+.box-name a:hover {
+  text-decoration: none;
+}
+
 .ui-state-highlight {
   height: 62px;
   color: #ccc;
@@ -150,10 +180,19 @@ a:hover {
 
 .box-delete-btn {
   margin-left: 5px;
+  color: red;
+}
+
+.box-delete-btn:hover {
+  color: #cc0000;
 }
 
 .badge a {
   color: white;
+  text-decoration: none;
+}
+
+.badge a:hover {
   text-decoration: none;
 }
 
@@ -164,6 +203,14 @@ a:hover {
 .add-item-form {
   margin-top: 10px;
   display: none;
+}
+
+.item-delete-btn {
+  color: red;
+}
+
+.item-delete-btn:hover {
+  color: #cc0000;
 }
 
 .add-item-btn {

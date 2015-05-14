@@ -6,16 +6,21 @@
 
 <div>
 
-  <div id="my-canvas" data-locker="<%= @locker.to_json %>"></div>
+  <div id="my-canvas" data-locker="<%= @locker.to_json %>">
+    <%= link_to fa_icon("question-circle"), "javascript:void(0)", id: "scene-help-btn", "data-toggle": "modal",  "data-target": ".modal" %>
+  </div>
 
   <div class="box-wrapper">
     <div class="box-form col-md-6">
-      <h2 class="locker-name"><%= best_in_place @locker, :name, as: :input, inner_class: "locker-title" %></h2>
+      <h2 class="locker-name" data-toggle="tooltip" title="Click to Edit" data-placement="bottom"><%= best_in_place @locker, :name, as: :input, inner_class: "locker-title" %></h2>
       <%= link_to fa_icon("info-circle"), "javascript:void(0)", id: "locker-info-btn" %>
       <div class="locker-info">
         <p>Length: <%= @locker.length %></p>
         <p>Width: <%= @locker.width %></p>
-        <p>Last Updated: <%= @locker.updated_at.strftime("%Y-%b-%d") %></p>
+        <p>
+          Last Updated: <%= @locker.updated_at.strftime("%Y-%b-%d %H:%M") %>          
+          <%= link_to fa_icon("trash-o"), locker_path(@locker), method: :delete, data: { confirm: "Are you sure you want to delete your locker?" }, class: "locker-delete-btn" %>
+        </p>
       </div>        
 
       <h3 class="new-box-header">New Box:</h3>
@@ -38,6 +43,28 @@
       </div>    
     </div>    
   </div>
+
+  <div class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">3D Locker Help</h4>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <li><h6>Boxes can be dragged and dropped in their desired location</h6></li>
+            <li><h6>Boxes can be stacked and rearranged into any arrangement</h6></li>
+            <li><h6>Click a box in the view to show the contents in the list</h6></li>
+            <li><h6>Click the box name in the box list to highlight the location in the view</h6></li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
   
 </div>
