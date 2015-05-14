@@ -72,7 +72,7 @@ GEM
     columnize (0.9.0)
     debug_inspector (0.0.2)
     erubis (2.7.0)
-    exception_notification (4.1.0)
+    exception_notification (4.0.1)
       actionmailer (>= 3.0.4)
       activesupport (>= 3.0.4)
     execjs (2.5.2)
@@ -190,7 +190,7 @@ DEPENDENCIES
   cancancan (~> 1.10)
   cocoon
   coffee-rails (~> 4.1.0)
-  exception_notification
+  exception_notification (= 4.0.1)
   font-awesome-rails
   hirb
   interactive_editor
