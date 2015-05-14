@@ -1,7 +1,7 @@
 <%= simple_form_for @box, url: locker_boxes_path(@locker) do |f| %>
   <%= f.input :name, label: false, placeholder: "Box Name" %>
   <%= f.input :cube_id, as: :hidden %>
-  <h4 class="box-item-title">Box Items</h4>
+  <h4 class="box-item-title">Box Items:</h4>
   <div id="box-items">
     <%= f.full_error :items %>
     <%= f.simple_fields_for :items do |i| %>

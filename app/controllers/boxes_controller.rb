@@ -16,6 +16,8 @@ class BoxesController < ApplicationController
       if @box.save
         @item = Item.new
         format.html { render partial: 'boxes/box_list', locals: { box: @box } }
+      else
+        render "lockers/show"
       end
     end
   end

@@ -107,7 +107,7 @@ canvas {
 }
 
 .new_box {
-  max-height: 320px;
+  max-height: 377px;
   overflow-y: scroll; 
 }
 
@@ -127,6 +127,7 @@ canvas {
 .remove-item-form-btn {
   display: inline-block;
   position: absolute;
+  width: 35px;
   padding-left: 10px;
   top: 5px;
 }
@@ -152,6 +153,10 @@ a:hover {
   height: 436px;
   overflow-y: scroll;
 }
+
+/*li.box:hover {
+  background-color: #f2f2f2;
+}*/
 
 .box-name {
   display: inline-block;
@@ -199,6 +204,10 @@ a:hover {
 .box-items {
   display: none;
 }
+
+/*li.item:hover {
+  background-color: #f2f2f2;
+}*/
 
 .add-item-form {
   margin-top: 10px;

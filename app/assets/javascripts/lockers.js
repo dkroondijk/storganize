@@ -33,6 +33,41 @@ $(document).ready(function() {
 
   $('#locker-info-btn').click(function(){
     $('.locker-info').slideToggle();
-  })
+  });
+
+  // $('.box-list').on('click', 'li.box', function(){
+  //   $(this).children('.box-items').slideToggle();
+  // });
+
+  $(document).on('mouseenter', 'li.box', function(){
+    $(this).css('background-color', '#f2f2f2');
+  });
+
+  $(document).on('mouseleave', 'li.box', function(){
+    $(this).css('background-color', '#ffffff');
+  });
+
+  $(document).on('mouseenter', 'li.item', function(){
+    $(this).css('background-color', '#f2f2f2');
+    $(this).parents('.box').css('background-color', '#ffffff')
+  });
+
+  $(document).on('mouseleave', 'li.item', function(){
+    $(this).css('background-color', '#ffffff');
+  });
+
+  $('#new_box')
+    .on('cocoon:before-insert', function(e,task_to_be_added) {
+      task_to_be_added.fadeIn('slow');
+    })
+    .on('cocoon:after-insert', function(e, added_task) {
+      // e.g. set the background of inserted task
+      // added_task.css("background","#f2f2f2");
+    })
+    .on('cocoon:before-remove', function(e, task) {
+      // allow some time for the animation to complete
+      $(this).data('remove-timeout', 1000);
+      task.fadeOut('slow');
+    });
 
 });

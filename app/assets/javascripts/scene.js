@@ -72,7 +72,7 @@ $(document).ready(function(){
     var line = new THREE.Line( gridGeometry, gridMaterial, THREE.LinePieces );
     scene.add( line );
 
-    var geometry = new THREE.PlaneBufferGeometry( 500, 500 );
+    var geometry = new THREE.PlaneBufferGeometry( 1000, 1000 );
     // rotate plane from vertical to horizontal about x-axis
     geometry.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
 
@@ -101,7 +101,6 @@ $(document).ready(function(){
     var gridWidth = lockerWidth * 25 + 25;
 
     var cube = newCube($("#box_name").val(), gridWidth, 25, gridLength);
-    addCube(cube);
     
     var data = {};
     data["box"] = {};
@@ -132,6 +131,7 @@ $(document).ready(function(){
         alert("Could not add box!");
       },
       success: function(response){
+        addCube(cube);
         $('.box-list').append(response);
         $('input[type=text]').val('');
       }
