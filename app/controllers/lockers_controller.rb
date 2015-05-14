@@ -12,7 +12,8 @@ class LockersController < ApplicationController
     if @locker.save
       redirect_to locker_path(@locker), notice: "New Locker Added!"
     else
-      render "/lockers/index"
+      # render "/lockers/index"
+      redirect_to lockers_path
       flash[:alert] = "Can't Create Locker!"
     end
   end
