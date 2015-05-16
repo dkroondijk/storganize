@@ -92,6 +92,8 @@ canvas {
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px;
+  max-height: 318px;
+  overflow-y: scroll;
 }
 
 .locker-title {
@@ -261,9 +263,9 @@ img.bg {
 
 
 .top {
-  padding-top: 120px;
+  padding-top: 150px;
   position: relative;
-  margin-bottom: 150px;
+  margin-bottom: 230px;
 }
 
 .top img {

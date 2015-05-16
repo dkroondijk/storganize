@@ -24,7 +24,7 @@
     <%= link_to fa_icon("plus"), "javascript:void(0)" %>
     Add Item
   </div>
-  <div class="add-item-form">
+  <div class="add-item-form" id="add-item-form-<%= box.id %>">
     <%= render partial: "items/form", locals: {box: box} %>
   </div>
 </li>

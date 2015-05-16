@@ -11,9 +11,11 @@ $(document).ready(function(){
       SELECTED,
       box_id;
 
+  var lockerLength = $('#my-canvas').data('locker').length
+  var lockerWidth = $('#my-canvas').data('locker').width
   // Define scene and camera
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
-  camera.position.set( 250, 400, 650 );
+  camera.position.set( 50 * lockerWidth, 65 * lockerWidth, 90 * lockerWidth );
   camera.lookAt( new THREE.Vector3() );
 
   // Define renderer
@@ -44,8 +46,6 @@ $(document).ready(function(){
   var initialize = function() {
 
     var lockerName = $('#my-canvas').data('locker').name
-    var lockerLength = $('#my-canvas').data('locker').length
-    var lockerWidth = $('#my-canvas').data('locker').width
 
     var gridLength = lockerLength * 25, step = 50;
     var gridWidth = lockerWidth * 25, step = 50;
@@ -228,7 +228,7 @@ $(document).ready(function(){
       intersect.object.material.color.setHex(0xff0000);
 
       SELECTED = intersect.object;
-      console.log(SELECTED);      
+          
       // myCanvas.style.cursor = 'move';
     }
 

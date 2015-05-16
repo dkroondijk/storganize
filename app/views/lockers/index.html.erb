@@ -13,10 +13,10 @@
   <h2>New Locker</h2>
   <div class="locker-list">
     <%= simple_form_for @locker, url: lockers_path, method: :post do |f| %>
-      <%= f.input :name %>
-      <%= f.input :length %>
-      <%= f.input :width %>
-      <%= f.submit %>
+      <%= f.input :name, placeholder: "Locker Name" %>
+      <%= f.input :length, placeholder: "Multiples of box length" %>
+      <%= f.input :width, placeholder: "Multiples of box width" %>
+      <%= f.submit class: "btn btn-primary" %>
     <% end %>
   </div>
 </div>
