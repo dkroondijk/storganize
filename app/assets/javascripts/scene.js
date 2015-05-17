@@ -15,7 +15,7 @@ $(document).ready(function(){
   var lockerWidth = $('#my-canvas').data('locker').width
   // Define scene and camera
   var camera = new THREE.PerspectiveCamera( 45, myCanvas.innerWidth() / myCanvas.innerHeight(), 1, 10000 );
-  camera.position.set( 50 * lockerWidth, 65 * lockerWidth, 90 * lockerWidth );
+  camera.position.set( 60 * lockerWidth, 75 * lockerWidth, 100 * lockerWidth );
   camera.lookAt( new THREE.Vector3() );
 
   // Define renderer
@@ -128,7 +128,7 @@ $(document).ready(function(){
       method: 'post',
       data: formData,
       error: function(){
-        alert("Could not add box!");
+        // alert("Could not add box!");
       },
       success: function(response){
         addCube(cube);
@@ -307,7 +307,7 @@ $(document).ready(function(){
       method: 'delete',
       dataType: 'json',
       error: function(){
-        alert("Can't delete box");
+        // alert("Can't delete box");
       },
       success: callback(box)
     });
