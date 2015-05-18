@@ -111,24 +111,12 @@ $(document).ready(function(){
     var formData = $(this).serialize() + '&' + $.param(data);
     var locker_id = $('#my-canvas').data('locker').id;
 
-    var deparam = function (querystring) {
-      querystring = querystring.substring(querystring.indexOf('?')+1).split('&');
-      var params = {}, pair, d = decodeURIComponent, i;
-      for (i = querystring.length; i > 0;) {
-        pair = querystring[--i].split('=');
-        params[d(pair[0])] = d(pair[1]);
-      }
-      return params;
-    };
-
-    var boxData = deparam(formData);
-
     $.ajax({
       url: '/lockers/' + locker_id + '/boxes.html',
       method: 'post',
       data: formData,
       error: function(){
-        // alert("Could not add box!");
+        alert("Could not add box!");
       },
       success: function(response){
         addCube(cube);
@@ -383,7 +371,7 @@ $(document).ready(function(){
 
       if(cubes[i].name === $(this).parents('.box').data('box').name) {
         cubes[i].material.color.setHex(0xff0000);
-      } else {
+      }else {
         cubes[i].material.transparent = true;
         cubes[i].material.opacity = 0.3;        
       }
@@ -429,7 +417,7 @@ $(document).ready(function(){
   //   })
   // });
     
-
+ 
 
   $('.box-items').hide();
   
